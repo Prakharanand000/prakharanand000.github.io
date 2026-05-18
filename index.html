@@ -575,6 +575,31 @@ footer { padding:2rem 2.5rem; display:flex; align-items:center; justify-content:
         </div>
       </div>
 
+      <div class="project-card fade-in" data-cat="personal" style="transition-delay:0.75s">
+        <p class="project-award">Personal Project &mdash; Snowflake Cortex AI</p>
+        <h3 class="project-name">LegalLens</h3>
+        <p class="project-desc">AI-powered legal analytics platform for General Counsel teams. Provides real-time visibility into outside counsel spend, matter backlogs, and contract expiration risks. Natural language querying via Snowflake Cortex lets users ask plain-English questions like "Which firms are over budget in M&amp;A?" without writing SQL. AI sentiment analysis flags contract risks across 30/60/90-day windows.</p>
+        <div class="project-footer">
+          <span class="project-stack">Snowflake (Cortex AI), dbt, Apache Airflow, Streamlit, Python</span>
+          <div class="project-links">
+            <a href="https://github.com/Prakharanand000/LegalLens-Snowflake-Powered" target="_blank" class="proj-link">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card fade-in" data-cat="personal" style="transition-delay:0.8s">
+        <p class="project-award">Personal Project &mdash; Deployed on Render</p>
+        <h3 class="project-name">Contact Center AI Intent Classifier</h3>
+        <p class="project-desc">Production-grade NLP pipeline classifying customer support intents across 151 labels (150 intents + out-of-scope). BERT-based classifier with a hybrid BM25 + dense-embedding fallback when confidence drops below threshold. Achieves 91.4% weighted F1 on CLINC150 (23,700 utterances) with ~28% reduction in average resolution turns vs. baseline. Includes 3-turn dialog state tracking and slot extraction.</p>
+        <div class="project-footer">
+          <span class="project-stack">BERT (HuggingFace), BM25, sentence-transformers, FastAPI, Python</span>
+          <div class="project-links">
+            <a href="https://contact-center-ai-intent-classifier.onrender.com" target="_blank" class="proj-link">Live</a>
+            <a href="https://github.com/Prakharanand000/contact-center-ai-intent-classifier" target="_blank" class="proj-link">GitHub</a>
+          </div>
+        </div>
+      </div>
+
 </div>
   </div>
 </section>
