@@ -647,6 +647,52 @@ footer { padding:2rem 2.5rem; display:flex; align-items:center; justify-content:
       </div>
     </div>
 
+    <div class="research-entry fade-in">
+      <div class="research-meta-col">
+        <p class="research-status">Pilot Complete</p>
+        <p class="research-date">May 2026</p>
+        <p class="research-field">AI Safety &middot; LLM Evaluation &middot; Political Bias</p>
+      </div>
+      <div>
+        <h3 class="research-title">Political Framing Bias in LLM Refusal Behavior</h3>
+        <p class="research-abstract">Pre-registered eval testing whether frontier LLMs show asymmetric refusal rates when identical economic policy requests are framed with left-coded vs. right-coded language. Built a 60-pair dataset across 12 policy topics (tax, trade, labor, housing, energy, fiscal policy, and more) with matched LEFT / NEUTRAL / RIGHT framings for the same underlying task. Ran 540 API calls across Claude Sonnet 4.6, Claude Opus 4.7, and GPT-4o-mini, scored by a Claude Opus 4.7 judge. Found strong, consistent right-coded refusal bias across all three models: each refuses right-framed requests ~15&ndash;16% of the time while refusing identical left-framed requests 0% of the time (RRD &asymp; &minus;0.15). Five pairs hit maximum asymmetry (RRD = &minus;1.0), concentrated in tax policy, energy, housing, and fiscal policy.</p>
+        <div class="research-tag-row">
+          <span class="tag">Python</span>
+          <span class="tag">Claude Sonnet 4.6</span>
+          <span class="tag">Claude Opus 4.7</span>
+          <span class="tag">GPT-4o-mini</span>
+          <span class="tag">pandas</span>
+          <span class="tag">scipy</span>
+        </div>
+        <div class="research-links">
+          <a href="https://github.com/Prakharanand000/refusal-asymmetry" target="_blank" class="proj-link">GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="research-entry fade-in">
+      <div class="research-meta-col">
+        <p class="research-status">In Progress</p>
+        <p class="research-date">May 2026</p>
+        <p class="research-field">AI Safety &middot; AML Compliance &middot; Hallucination</p>
+      </div>
+      <div>
+        <h3 class="research-title">Hallucination Rates in LLM-Based AML Adverse Media Screening</h3>
+        <p class="research-abstract">Pre-registered empirical evaluation measuring false positive rates and hallucinated risk claims when frontier LLMs are used for AML adverse media screening. Building a dataset of 100 synthetic entities across five ground-truth categories (clean, PEP, sanctioned, fraud, adverse media), each paired with a structured news article. Testing whether models fabricate specific adverse associations absent from the source material &mdash; sanctions links, fraud convictions, PEP status &mdash; and whether extended thinking reduces hallucination rates. Motivated by the deployed failure mode of AI-generated adverse media flags causing innocent individuals to be debanked at scale.</p>
+        <div class="research-tag-row">
+          <span class="tag">Python</span>
+          <span class="tag">Claude Sonnet 4.6</span>
+          <span class="tag">Claude Opus 4.7</span>
+          <span class="tag">GPT-4o</span>
+          <span class="tag">AML</span>
+          <span class="tag">Extended Thinking</span>
+        </div>
+        <div class="research-links">
+          <a href="https://github.com/Prakharanand000/adverse-media-hallucination" target="_blank" class="proj-link">GitHub</a>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
