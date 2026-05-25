@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adverse Media Hallucination in LLM-Based AML Screening | Working Paper</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink: #1a1a2e;
+      --muted: #555;
+      --accent: #0f766e;
+      --border: #d1d5db;
+      --bg: #fafafa;
+      --card: #ffffff;
+      --tag-bg: #f0fdfa;
+      --tag-color: #0f766e;
+    }
+    body { font-family: 'Georgia', serif; background: var(--bg); color: var(--ink); line-height: 1.7; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    header { background: var(--card); border-bottom: 1px solid var(--border); padding: 1rem 0; }
+    .header-inner { max-width: 860px; margin: 0 auto; padding: 0 1.5rem; display: flex; align-items: center; gap: 1rem; font-family: sans-serif; font-size: 0.85rem; color: var(--muted); }
+    .header-inner .site-name { font-weight: 600; color: var(--ink); }
+    .header-inner .sep { color: var(--border); }
+
+    .hero { background: linear-gradient(135deg, #134e4a 0%, #1a1a2e 100%); color: #fff; padding: 4rem 1.5rem 3rem; text-align: center; }
+    .hero .label { font-family: sans-serif; font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: #5eead4; margin-bottom: 1rem; }
+    .hero h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 700; line-height: 1.25; max-width: 720px; margin: 0 auto 1.2rem; }
+    .hero .subtitle { font-size: 1.05rem; color: #cbd5e1; max-width: 600px; margin: 0 auto 2rem; }
+    .hero .badges { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; }
+    .badge { display: inline-flex; align-items: center; gap: 0.4rem; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); border-radius: 999px; padding: 0.3rem 0.9rem; font-family: sans-serif; font-size: 0.8rem; color: #e2e8f0; }
+
+    main { max-width: 860px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+
+    .meta-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem 2rem; margin-bottom: 2.5rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1.2rem; font-family: sans-serif; }
+    .meta-item .meta-label { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.25rem; }
+    .meta-item .meta-value { font-size: 0.92rem; font-weight: 600; color: var(--ink); }
+
+    section { margin-bottom: 2.5rem; }
+    h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.9rem; padding-bottom: 0.4rem; border-bottom: 2px solid var(--accent); display: inline-block; }
+    p { margin-bottom: 1rem; font-size: 0.97rem; color: #333; }
+
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; margin: 1.2rem 0; }
+    .stat-box { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.1rem; text-align: center; font-family: sans-serif; }
+    .stat-box .stat-num { font-size: 1.8rem; font-weight: 700; color: var(--accent); line-height: 1; }
+    .stat-box .stat-label { font-size: 0.75rem; color: var(--muted); margin-top: 0.3rem; }
+
+    .finding { background: var(--card); border-left: 4px solid var(--accent); border-radius: 0 8px 8px 0; padding: 1rem 1.2rem; margin-bottom: 1rem; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+    .finding .finding-title { font-family: sans-serif; font-weight: 700; font-size: 0.9rem; color: var(--accent); margin-bottom: 0.35rem; }
+    .finding p { margin: 0; font-size: 0.92rem; }
+
+    .result-highlight { background: #f0fdfa; border: 1px solid #99f6e4; border-radius: 8px; padding: 1.2rem 1.5rem; margin: 1.2rem 0; font-family: sans-serif; }
+    .result-highlight .rh-label { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.4rem; }
+    .result-highlight .rh-value { font-size: 1.05rem; font-weight: 600; color: var(--ink); }
+
+    .table-wrap { overflow-x: auto; margin: 1.2rem 0; }
+    table { width: 100%; border-collapse: collapse; font-family: sans-serif; font-size: 0.88rem; }
+    th { background: #f1f5f9; text-align: left; padding: 0.6rem 0.9rem; font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); border-bottom: 2px solid var(--border); }
+    td { padding: 0.6rem 0.9rem; border-bottom: 1px solid var(--border); color: #333; }
+    tr:last-child td { border-bottom: none; }
+    .good { color: #059669; font-weight: 700; }
+    .bad { color: #dc2626; font-weight: 700; }
+    .highlight-row td { background: #f0fdfa; font-weight: 600; }
+
+    .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.8rem 0; }
+    .tag { background: var(--tag-bg); color: var(--tag-color); border-radius: 4px; padding: 0.2rem 0.6rem; font-family: sans-serif; font-size: 0.78rem; font-weight: 500; }
+
+    .links-row { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 1rem; }
+    .btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 1.1rem; border-radius: 6px; font-family: sans-serif; font-size: 0.85rem; font-weight: 600; transition: opacity 0.15s; }
+    .btn:hover { opacity: 0.85; text-decoration: none; }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-outline { background: var(--card); color: var(--ink); border: 1px solid var(--border); }
+
+    .prereg { background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; padding: 0.9rem 1.2rem; font-family: sans-serif; font-size: 0.85rem; color: #166534; margin-bottom: 2rem; }
+
+    .category-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.8rem; margin: 1rem 0; }
+    .category-pill { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 0.7rem 1rem; font-family: sans-serif; font-size: 0.83rem; }
+    .category-pill .cat-name { font-weight: 600; color: var(--ink); }
+    .category-pill .cat-desc { color: var(--muted); font-size: 0.78rem; margin-top: 0.15rem; }
+
+    footer { background: var(--card); border-top: 1px solid var(--border); padding: 1.5rem; text-align: center; font-family: sans-serif; font-size: 0.8rem; color: var(--muted); }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <span class="site-name">Prakhar Anand</span>
+    <span class="sep">·</span>
+    <a href="https://prakharanand000.github.io">Portfolio</a>
+    <span class="sep">·</span>
+    <span>Research</span>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="label">Working Paper · 2026</div>
+  <h1>Adverse Media Hallucination in LLM-Based AML Screening</h1>
+  <p class="subtitle">A pre-registered evaluation of hallucination rates across frontier models in anti-money laundering adverse media screening tasks</p>
+  <div class="badges">
+    <span class="badge">🔬 Pre-registered</span>
+    <span class="badge">🏦 AML / FinCrime</span>
+    <span class="badge">100 Synthetic Entities</span>
+    <span class="badge">3 Models</span>
+    <span class="badge">5 Ground-truth Categories</span>
+  </div>
+</div>
+
+<main>
+
+  <div class="prereg">
+    ✅ <strong>Pre-registered evaluation.</strong> Study design, ground-truth categories, and hallucination taxonomy were registered prior to model evaluation. Results reflect the full pre-specified analysis.
+  </div>
+
+  <div class="meta-card">
+    <div class="meta-item">
+      <div class="meta-label">Author</div>
+      <div class="meta-value">Prakhar Anand</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Published</div>
+      <div class="meta-value">2026</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Entities</div>
+      <div class="meta-value">100 synthetic</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Categories</div>
+      <div class="meta-value">5 ground-truth</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Models Tested</div>
+      <div class="meta-value">3</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Domain</div>
+      <div class="meta-value">AML / Compliance</div>
+    </div>
+  </div>
+
+  <div class="links-row">
+    <a class="btn btn-primary" href="https://medium.com/@prakharanand/adverse-media-hallucination-in-llm-based-aml-screening-a6a361e48c94" target="_blank">📝 Read on Medium</a>
+    <a class="btn btn-outline" href="https://github.com/Prakharanand000/adverse-media-hallucination" target="_blank">⬡ GitHub Repository</a>
+  </div>
+
+  <br/>
+
+  <section>
+    <h2>Abstract</h2>
+    <p>
+      Anti-money laundering (AML) compliance increasingly relies on adverse media screening — the process of identifying negative news associated with entities to flag potential financial crime risk. Large language models are being evaluated and deployed for this task, but their hallucination behavior in this high-stakes context is poorly understood.
+    </p>
+    <p>
+      This paper presents a pre-registered evaluation of hallucination rates across three frontier models — Claude Sonnet 4.6, Claude Opus 4.7, and GPT-4o-mini — using 100 synthetic entities spanning 5 ground-truth categories. We find a <strong>0% false positive rate on clean entities</strong>, but identify two novel hallucination failure modes: <strong>PEP inference hallucination</strong> (50% rate on Claude Sonnet) and <strong>template-regurgitation hallucination</strong> (67% on GPT-4o-mini). Claude Opus 4.7 showed 0% hallucination across all categories.
+    </p>
+    <div class="tags">
+      <span class="tag">Hallucination</span>
+      <span class="tag">AML</span>
+      <span class="tag">Adverse Media</span>
+      <span class="tag">FinCrime</span>
+      <span class="tag">LLM Evaluation</span>
+      <span class="tag">Compliance</span>
+      <span class="tag">Risk</span>
+    </div>
+  </section>
+
+  <section>
+    <h2>Study Design</h2>
+    <p>
+      100 synthetic entities were constructed across 5 ground-truth categories, designed to probe specific hallucination failure modes without using real individuals or organisations. Each model was asked to perform an adverse media screening assessment for each entity, and outputs were evaluated against ground-truth labels by a blinded reviewer.
+    </p>
+
+    <div class="category-grid">
+      <div class="category-pill">
+        <div class="cat-name">Clean Entities</div>
+        <div class="cat-desc">No adverse media — baseline false positive probe</div>
+      </div>
+      <div class="category-pill">
+        <div class="cat-name">Confirmed Adverse</div>
+        <div class="cat-desc">True adverse media present — recall probe</div>
+      </div>
+      <div class="category-pill">
+        <div class="cat-name">PEP-Adjacent</div>
+        <div class="cat-desc">Political connections without direct adverse media</div>
+      </div>
+      <div class="category-pill">
+        <div class="cat-name">Common Names</div>
+        <div class="cat-desc">High name-collision risk entities</div>
+      </div>
+      <div class="category-pill">
+        <div class="cat-name">Ambiguous Entities</div>
+        <div class="cat-desc">Mixed or incomplete adverse media signals</div>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-box">
+        <div class="stat-num">100</div>
+        <div class="stat-label">Synthetic Entities</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">5</div>
+        <div class="stat-label">Ground-truth Categories</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">3</div>
+        <div class="stat-label">Models Evaluated</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">0%</div>
+        <div class="stat-label">False Positive Rate (Clean)</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Key Findings</h2>
+
+    <div class="finding">
+      <div class="finding-title">0% False Positive Rate on Clean Entities</div>
+      <p>All three models correctly avoided flagging clean entities as adverse, suggesting that the basic false-positive problem (flagging innocent parties) is well-controlled. The more dangerous failure modes are subtler.</p>
+    </div>
+
+    <div class="finding">
+      <div class="finding-title">PEP Inference Hallucination — 50% Rate on Claude Sonnet</div>
+      <p>Claude Sonnet 4.6 hallucinated politically exposed person (PEP) status for entities that were politically adjacent but not themselves PEPs, at a rate of 50% on the PEP-adjacent category. This represents a novel failure mode where the model infers risk from contextual association rather than direct evidence.</p>
+    </div>
+
+    <div class="finding">
+      <div class="finding-title">Template-Regurgitation Hallucination — 67% Rate on GPT-4o-mini</div>
+      <p>GPT-4o-mini produced fabricated but structurally plausible adverse media summaries for 67% of ambiguous entities — generating content that matched the expected format of an adverse media report without grounding in actual evidence. This is a distinct failure mode from factual confabulation.</p>
+    </div>
+
+    <div class="finding">
+      <div class="finding-title">Claude Opus 4.7 — 0% Hallucination Across All Categories</div>
+      <p>Claude Opus 4.7 showed 0% hallucination across all five ground-truth categories, demonstrating that the failure modes identified are model-specific and not inherent to the task structure.</p>
+    </div>
+
+    <div class="result-highlight">
+      <div class="rh-label">Primary Result</div>
+      <div class="rh-value">Hallucination in LLM-based AML screening is not uniformly distributed: models with strong overall performance may still exhibit category-specific failure modes (PEP inference, template regurgitation) that pose specific compliance risks invisible to aggregate accuracy metrics.</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Results by Model</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Model</th>
+            <th>False Positive Rate (Clean)</th>
+            <th>PEP Inference Hallucination</th>
+            <th>Template Regurgitation</th>
+            <th>Overall Hallucination</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="highlight-row">
+            <td>Claude Opus 4.7</td>
+            <td class="good">0%</td>
+            <td class="good">0%</td>
+            <td class="good">0%</td>
+            <td class="good">0%</td>
+          </tr>
+          <tr>
+            <td>Claude Sonnet 4.6</td>
+            <td class="good">0%</td>
+            <td class="bad">50%</td>
+            <td>—</td>
+            <td class="bad">Elevated</td>
+          </tr>
+          <tr>
+            <td>GPT-4o-mini</td>
+            <td class="good">0%</td>
+            <td>—</td>
+            <td class="bad">67%</td>
+            <td class="bad">Elevated</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Implications for AML Practice</h2>
+    <p>
+      These findings have direct implications for compliance teams evaluating LLMs for adverse media screening:
+    </p>
+    <ul style="margin: 0.5rem 0 1rem 1.5rem; font-size: 0.95rem; color: #333;">
+      <li style="margin-bottom: 0.5rem;"><strong>Aggregate accuracy is insufficient.</strong> A model with 0% false positives on clean entities may still hallucinate in PEP-adjacent or ambiguous contexts.</li>
+      <li style="margin-bottom: 0.5rem;"><strong>Category-specific testing is required.</strong> Benchmark design must include the specific entity types most likely to trigger failure modes.</li>
+      <li style="margin-bottom: 0.5rem;"><strong>Model selection matters.</strong> The gap between Claude Opus 4.7 (0% hallucination) and smaller models (50–67% on specific categories) is significant for high-stakes deployments.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Citation</h2>
+    <div style="background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.2rem; font-family: monospace; font-size: 0.82rem; color: #444; white-space: pre-wrap;">Anand, P. (2026). Adverse Media Hallucination in LLM-Based AML Screening. Working Paper.
+https://prakharanand000.github.io/adverse-media-hallucination/</div>
+  </section>
+
+</main>
+
+<footer>
+  &copy; 2026 Prakhar Anand &nbsp;·&nbsp;
+  <a href="https://prakharanand000.github.io">Portfolio</a> &nbsp;·&nbsp;
+  <a href="https://github.com/Prakharanand000">GitHub</a> &nbsp;·&nbsp;
+  <a href="https://medium.com/@prakharanand">Medium</a>
+</footer>
+
+</body>
+</html>

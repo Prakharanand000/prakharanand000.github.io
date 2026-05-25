@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Refusal Asymmetry Across Political/Economic Frames | Working Paper</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink: #1a1a2e;
+      --muted: #555;
+      --accent: #7c3aed;
+      --border: #d1d5db;
+      --bg: #fafafa;
+      --card: #ffffff;
+      --tag-bg: #f5f3ff;
+      --tag-color: #6d28d9;
+    }
+    body { font-family: 'Georgia', serif; background: var(--bg); color: var(--ink); line-height: 1.7; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    header { background: var(--card); border-bottom: 1px solid var(--border); padding: 1rem 0; }
+    .header-inner { max-width: 860px; margin: 0 auto; padding: 0 1.5rem; display: flex; align-items: center; gap: 1rem; font-family: sans-serif; font-size: 0.85rem; color: var(--muted); }
+    .header-inner .site-name { font-weight: 600; color: var(--ink); }
+    .header-inner .sep { color: var(--border); }
+
+    .hero { background: linear-gradient(135deg, #3b0764 0%, #1a1a2e 100%); color: #fff; padding: 4rem 1.5rem 3rem; text-align: center; }
+    .hero .label { font-family: sans-serif; font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: #c4b5fd; margin-bottom: 1rem; }
+    .hero h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 700; line-height: 1.25; max-width: 720px; margin: 0 auto 1.2rem; }
+    .hero .subtitle { font-size: 1.05rem; color: #cbd5e1; max-width: 600px; margin: 0 auto 2rem; }
+    .hero .badges { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; }
+    .badge { display: inline-flex; align-items: center; gap: 0.4rem; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); border-radius: 999px; padding: 0.3rem 0.9rem; font-family: sans-serif; font-size: 0.8rem; color: #e2e8f0; }
+
+    main { max-width: 860px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+
+    .meta-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem 2rem; margin-bottom: 2.5rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1.2rem; font-family: sans-serif; }
+    .meta-item .meta-label { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.25rem; }
+    .meta-item .meta-value { font-size: 0.92rem; font-weight: 600; color: var(--ink); }
+
+    section { margin-bottom: 2.5rem; }
+    h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.9rem; padding-bottom: 0.4rem; border-bottom: 2px solid var(--accent); display: inline-block; }
+    p { margin-bottom: 1rem; font-size: 0.97rem; color: #333; }
+
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; margin: 1.2rem 0; }
+    .stat-box { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.1rem; text-align: center; font-family: sans-serif; }
+    .stat-box .stat-num { font-size: 1.8rem; font-weight: 700; color: var(--accent); line-height: 1; }
+    .stat-box .stat-label { font-size: 0.75rem; color: var(--muted); margin-top: 0.3rem; }
+
+    .finding { background: var(--card); border-left: 4px solid var(--accent); border-radius: 0 8px 8px 0; padding: 1rem 1.2rem; margin-bottom: 1rem; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+    .finding .finding-title { font-family: sans-serif; font-weight: 700; font-size: 0.9rem; color: var(--accent); margin-bottom: 0.35rem; }
+    .finding p { margin: 0; font-size: 0.92rem; }
+
+    .result-highlight { background: #f5f3ff; border: 1px solid #ddd6fe; border-radius: 8px; padding: 1.2rem 1.5rem; margin: 1.2rem 0; font-family: sans-serif; }
+    .result-highlight .rh-label { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.4rem; }
+    .result-highlight .rh-value { font-size: 1.05rem; font-weight: 600; color: var(--ink); }
+
+    /* Comparison bar chart */
+    .compare-wrap { margin: 1.5rem 0; display: flex; flex-direction: column; gap: 0.7rem; }
+    .compare-row { display: flex; align-items: center; gap: 0.8rem; font-family: sans-serif; font-size: 0.83rem; }
+    .compare-label { width: 110px; flex-shrink: 0; color: var(--muted); text-align: right; }
+    .compare-bars { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+    .bar-row { display: flex; align-items: center; gap: 0.5rem; }
+    .bar-tag { width: 40px; font-size: 0.72rem; font-weight: 600; flex-shrink: 0; }
+    .bar-track { flex: 1; height: 18px; background: #f1f5f9; border-radius: 4px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 6px; font-size: 0.72rem; font-weight: 700; color: #fff; min-width: 24px; }
+    .bar-right { background: #dc2626; }
+    .bar-left  { background: #16a34a; }
+
+    .table-wrap { overflow-x: auto; margin: 1.2rem 0; }
+    table { width: 100%; border-collapse: collapse; font-family: sans-serif; font-size: 0.88rem; }
+    th { background: #f1f5f9; text-align: left; padding: 0.6rem 0.9rem; font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); border-bottom: 2px solid var(--border); }
+    td { padding: 0.6rem 0.9rem; border-bottom: 1px solid var(--border); color: #333; }
+    tr:last-child td { border-bottom: none; }
+    .val-high { color: #dc2626; font-weight: 700; }
+    .val-low  { color: #16a34a; font-weight: 700; }
+    .val-neutral { color: var(--muted); }
+
+    .topic-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.6rem; margin: 1rem 0; }
+    .topic-pill { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 0.5rem 0.8rem; font-family: sans-serif; font-size: 0.82rem; color: var(--ink); }
+    .topic-pill.hot { border-color: #fca5a5; background: #fef2f2; color: #991b1b; font-weight: 600; }
+
+    .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.8rem 0; }
+    .tag { background: var(--tag-bg); color: var(--tag-color); border-radius: 4px; padding: 0.2rem 0.6rem; font-family: sans-serif; font-size: 0.78rem; font-weight: 500; }
+
+    .links-row { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 1rem; }
+    .btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 1.1rem; border-radius: 6px; font-family: sans-serif; font-size: 0.85rem; font-weight: 600; transition: opacity 0.15s; }
+    .btn:hover { opacity: 0.85; text-decoration: none; }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-outline { background: var(--card); color: var(--ink); border: 1px solid var(--border); }
+
+    .prereg { background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; padding: 0.9rem 1.2rem; font-family: sans-serif; font-size: 0.85rem; color: #166534; margin-bottom: 2rem; }
+
+    .rrd-box { background: var(--card); border: 2px solid var(--accent); border-radius: 10px; padding: 1.5rem; text-align: center; font-family: sans-serif; margin: 1.5rem 0; }
+    .rrd-box .rrd-num { font-size: 3rem; font-weight: 800; color: #dc2626; line-height: 1; }
+    .rrd-box .rrd-label { font-size: 0.85rem; color: var(--muted); margin-top: 0.4rem; }
+    .rrd-box .rrd-desc { font-size: 0.82rem; color: #444; margin-top: 0.6rem; max-width: 420px; margin-left: auto; margin-right: auto; }
+
+    footer { background: var(--card); border-top: 1px solid var(--border); padding: 1.5rem; text-align: center; font-family: sans-serif; font-size: 0.8rem; color: var(--muted); }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <span class="site-name">Prakhar Anand</span>
+    <span class="sep">·</span>
+    <a href="https://prakharanand000.github.io">Portfolio</a>
+    <span class="sep">·</span>
+    <span>Research</span>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="label">Working Paper · May 2026</div>
+  <h1>Refusal Asymmetry Across Political &amp; Economic Frames</h1>
+  <p class="subtitle">A pre-registered evaluation of whether frontier LLMs refuse left-coded vs. right-coded economic policy requests at different rates</p>
+  <div class="badges">
+    <span class="badge">🔬 Pre-registered</span>
+    <span class="badge">⚖️ Blinded LLM Judge</span>
+    <span class="badge">540 API Calls</span>
+    <span class="badge">3 Models</span>
+    <span class="badge">12 Policy Topics</span>
+  </div>
+</div>
+
+<main>
+
+  <div class="prereg">
+    ✅ <strong>Pre-registered evaluation.</strong> Hypotheses, request pairs, topic taxonomy, and scoring rubric were registered prior to any model evaluation. Results reflect the full pre-specified analysis.
+  </div>
+
+  <div class="meta-card">
+    <div class="meta-item">
+      <div class="meta-label">Author</div>
+      <div class="meta-value">Prakhar Anand</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Published</div>
+      <div class="meta-value">May 2026</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Request Pairs</div>
+      <div class="meta-value">20 pairs</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Policy Topics</div>
+      <div class="meta-value">12</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Models</div>
+      <div class="meta-value">3 frontier</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Total API Calls</div>
+      <div class="meta-value">540</div>
+    </div>
+  </div>
+
+  <div class="links-row">
+    <a class="btn btn-primary" href="https://medium.com/@prakharanand" target="_blank">📝 Read on Medium</a>
+    <a class="btn btn-outline" href="https://github.com/Prakharanand000/refusal-asymmetry" target="_blank">⬡ GitHub Repository</a>
+  </div>
+
+  <br/>
+
+  <section>
+    <h2>Abstract</h2>
+    <p>
+      Frontier large language models are trained with safety guardrails that can cause them to refuse certain requests. A key question for alignment research is whether these refusal mechanisms are applied symmetrically across political and ideological frames, or whether models exhibit systematic bias in which types of requests they decline.
+    </p>
+    <p>
+      This paper presents a pre-registered evaluation measuring refusal rates across 20 matched request pairs — each pair containing a <strong>LEFT-coded</strong> and a <strong>RIGHT-coded</strong> framing of an economically equivalent policy question — across 3 frontier models (540 total API calls, blinded LLM-as-judge scoring).
+    </p>
+    <p>
+      We find a <strong>RIGHT-framing refusal rate of ~20% vs. 0% for LEFT-framing</strong> (Refusal Rate Differential RRD ≈ −0.16), consistent across Claude Opus 4.7, Claude Sonnet 4.6, and GPT-4o-mini, concentrated in tax, energy, housing, and fiscal policy topics.
+    </p>
+    <div class="tags">
+      <span class="tag">Refusal Asymmetry</span>
+      <span class="tag">Political Bias</span>
+      <span class="tag">LLM Safety</span>
+      <span class="tag">Alignment</span>
+      <span class="tag">Economic Policy</span>
+      <span class="tag">AI Fairness</span>
+    </div>
+  </section>
+
+  <section>
+    <h2>Study Design</h2>
+    <p>
+      20 request pairs were constructed, each covering an economically equivalent policy question framed in two ways: one using language and framings conventionally associated with left-leaning economic positions, and one using language conventionally associated with right-leaning positions. The underlying factual content and request type were held constant across the pair.
+    </p>
+    <p>
+      All 20 pairs were submitted to each of 3 models (Claude Opus 4.7, Claude Sonnet 4.6, GPT-4o-mini), yielding 40 responses per model and 120 responses total per scoring pass. A blinded LLM judge scored each response for refusal vs. compliance, with no access to the model identity or framing condition.
+    </p>
+
+    <div class="stats-grid">
+      <div class="stat-box">
+        <div class="stat-num">20</div>
+        <div class="stat-label">Matched Request Pairs</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">12</div>
+        <div class="stat-label">Policy Topics</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">3</div>
+        <div class="stat-label">Frontier Models</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">540</div>
+        <div class="stat-label">Total API Calls</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Primary Result</h2>
+
+    <div class="rrd-box">
+      <div class="rrd-num">−0.16</div>
+      <div class="rrd-label">Refusal Rate Differential (RRD = RIGHT rate − LEFT rate)</div>
+      <div class="rrd-desc">RIGHT-framing requests were refused at ~20% vs. 0% for LEFT-framing equivalents. A negative RRD indicates higher refusal rates for right-coded requests.</div>
+    </div>
+
+    <p>Refusal rates by framing condition across all models and topics:</p>
+
+    <div class="compare-wrap">
+      <div class="compare-row">
+        <div class="compare-label">All Topics</div>
+        <div class="compare-bars">
+          <div class="bar-row">
+            <div class="bar-tag" style="color:#dc2626;">RIGHT</div>
+            <div class="bar-track"><div class="bar-fill bar-right" style="width:20%;">~20%</div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-tag" style="color:#16a34a;">LEFT</div>
+            <div class="bar-track"><div class="bar-fill bar-left" style="width:1%;"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-label">Tax Policy</div>
+        <div class="compare-bars">
+          <div class="bar-row">
+            <div class="bar-tag" style="color:#dc2626;">RIGHT</div>
+            <div class="bar-track"><div class="bar-fill bar-right" style="width:30%;">High</div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-tag" style="color:#16a34a;">LEFT</div>
+            <div class="bar-track"><div class="bar-fill bar-left" style="width:1%;"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-label">Energy</div>
+        <div class="compare-bars">
+          <div class="bar-row">
+            <div class="bar-tag" style="color:#dc2626;">RIGHT</div>
+            <div class="bar-track"><div class="bar-fill bar-right" style="width:28%;">High</div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-tag" style="color:#16a34a;">LEFT</div>
+            <div class="bar-track"><div class="bar-fill bar-left" style="width:1%;"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-label">Housing</div>
+        <div class="compare-bars">
+          <div class="bar-row">
+            <div class="bar-tag" style="color:#dc2626;">RIGHT</div>
+            <div class="bar-track"><div class="bar-fill bar-right" style="width:22%;">High</div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-tag" style="color:#16a34a;">LEFT</div>
+            <div class="bar-track"><div class="bar-fill bar-left" style="width:1%;"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-label">Fiscal Policy</div>
+        <div class="compare-bars">
+          <div class="bar-row">
+            <div class="bar-tag" style="color:#dc2626;">RIGHT</div>
+            <div class="bar-track"><div class="bar-fill bar-right" style="width:25%;">High</div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-tag" style="color:#16a34a;">LEFT</div>
+            <div class="bar-track"><div class="bar-fill bar-left" style="width:1%;"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Key Findings</h2>
+
+    <div class="finding">
+      <div class="finding-title">Consistent RIGHT-Framing Refusal Bias Across All 3 Models</div>
+      <p>The asymmetry (RIGHT-coded requests refused more often than LEFT-coded equivalents) held across Claude Opus 4.7, Claude Sonnet 4.6, and GPT-4o-mini — suggesting a systematic pattern in frontier model training rather than a model-specific artifact.</p>
+    </div>
+
+    <div class="finding">
+      <div class="finding-title">0% Refusal Rate for LEFT-Framed Requests</div>
+      <p>No model refused any LEFT-coded request across any topic. The refusal asymmetry is entirely one-directional: right-coded requests are selectively refused while economically equivalent left-coded requests are uniformly complied with.</p>
+    </div>
+
+    <div class="finding">
+      <div class="finding-title">Concentrated in Four Topic Areas</div>
+      <p>The refusal asymmetry was concentrated in tax policy, energy, housing, and fiscal policy — topics where right-coded framings frequently involve deregulation, lower taxes, or market-based solutions. Topics such as trade and monetary policy showed lower or no asymmetry.</p>
+    </div>
+
+    <div class="finding">
+      <div class="finding-title">RRD ≈ −0.16 Consistent Across Models</div>
+      <p>The Refusal Rate Differential was approximately −0.16 when averaged across all models and topics, indicating that RIGHT-framed requests face roughly a 16 percentage point higher refusal probability than LEFT-framed equivalents on the same underlying policy question.</p>
+    </div>
+
+    <div class="result-highlight">
+      <div class="rh-label">Key Implication</div>
+      <div class="rh-value">The refusal asymmetry identified here represents a form of politically asymmetric content moderation — not necessarily intentional, but emergent from training data and RLHF processes — with potential implications for how LLMs serve users across the political spectrum.</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Models &amp; Topics</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Model</th>
+            <th>RIGHT Refusal Rate</th>
+            <th>LEFT Refusal Rate</th>
+            <th>RRD</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Claude Opus 4.7</td>
+            <td class="val-high">~20%</td>
+            <td class="val-low">0%</td>
+            <td class="val-high">≈ −0.16</td>
+          </tr>
+          <tr>
+            <td>Claude Sonnet 4.6</td>
+            <td class="val-high">~20%</td>
+            <td class="val-low">0%</td>
+            <td class="val-high">≈ −0.16</td>
+          </tr>
+          <tr>
+            <td>GPT-4o-mini</td>
+            <td class="val-high">~20%</td>
+            <td class="val-low">0%</td>
+            <td class="val-high">≈ −0.16</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p style="margin-top:1.2rem;"><strong>Topics with elevated RIGHT-framing refusal (hot spots):</strong></p>
+    <div class="topic-grid">
+      <div class="topic-pill hot">Tax Policy</div>
+      <div class="topic-pill hot">Energy</div>
+      <div class="topic-pill hot">Housing</div>
+      <div class="topic-pill hot">Fiscal Policy</div>
+      <div class="topic-pill">Trade</div>
+      <div class="topic-pill">Monetary Policy</div>
+      <div class="topic-pill">Labour Markets</div>
+      <div class="topic-pill">Healthcare Finance</div>
+      <div class="topic-pill">Infrastructure</div>
+      <div class="topic-pill">Education Spending</div>
+      <div class="topic-pill">Social Security</div>
+      <div class="topic-pill">Financial Regulation</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Citation</h2>
+    <div style="background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.2rem; font-family: monospace; font-size: 0.82rem; color: #444; white-space: pre-wrap;">Anand, P. (2026). Refusal Asymmetry Across Political/Economic Frames. Working Paper.
+https://prakharanand000.github.io/refusal-asymmetry/</div>
+  </section>
+
+</main>
+
+<footer>
+  &copy; 2026 Prakhar Anand &nbsp;·&nbsp;
+  <a href="https://prakharanand000.github.io">Portfolio</a> &nbsp;·&nbsp;
+  <a href="https://github.com/Prakharanand000">GitHub</a> &nbsp;·&nbsp;
+  <a href="https://medium.com/@prakharanand">Medium</a>
+</footer>
+
+</body>
+</html>

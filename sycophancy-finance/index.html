@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sycophancy in LLM Financial Advice | Working Paper</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink: #1a1a2e;
+      --muted: #555;
+      --accent: #2563eb;
+      --border: #d1d5db;
+      --bg: #fafafa;
+      --card: #ffffff;
+      --tag-bg: #eff6ff;
+      --tag-color: #1d4ed8;
+      --warn: #dc2626;
+      --warn-bg: #fef2f2;
+    }
+    body { font-family: 'Georgia', serif; background: var(--bg); color: var(--ink); line-height: 1.7; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* Header */
+    header { background: var(--card); border-bottom: 1px solid var(--border); padding: 1rem 0; }
+    .header-inner { max-width: 860px; margin: 0 auto; padding: 0 1.5rem; display: flex; align-items: center; gap: 1rem; font-family: sans-serif; font-size: 0.85rem; color: var(--muted); }
+    .header-inner .site-name { font-weight: 600; color: var(--ink); }
+    .header-inner .sep { color: var(--border); }
+
+    /* Hero */
+    .hero { background: linear-gradient(135deg, #1e3a5f 0%, #1a1a2e 100%); color: #fff; padding: 4rem 1.5rem 3rem; text-align: center; }
+    .hero .label { font-family: sans-serif; font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: #93c5fd; margin-bottom: 1rem; }
+    .hero h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 700; line-height: 1.25; max-width: 700px; margin: 0 auto 1.2rem; }
+    .hero .subtitle { font-size: 1.05rem; color: #cbd5e1; max-width: 580px; margin: 0 auto 2rem; }
+    .hero .badges { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; }
+    .badge { display: inline-flex; align-items: center; gap: 0.4rem; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); border-radius: 999px; padding: 0.3rem 0.9rem; font-family: sans-serif; font-size: 0.8rem; color: #e2e8f0; }
+
+    /* Main */
+    main { max-width: 860px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+
+    /* Meta card */
+    .meta-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem 2rem; margin-bottom: 2.5rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1.2rem; font-family: sans-serif; }
+    .meta-item .meta-label { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.25rem; }
+    .meta-item .meta-value { font-size: 0.92rem; font-weight: 600; color: var(--ink); }
+
+    /* Sections */
+    section { margin-bottom: 2.5rem; }
+    h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.9rem; padding-bottom: 0.4rem; border-bottom: 2px solid var(--accent); display: inline-block; }
+    p { margin-bottom: 1rem; font-size: 0.97rem; color: #333; }
+
+    /* Stats grid */
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; margin: 1.2rem 0; }
+    .stat-box { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.1rem; text-align: center; font-family: sans-serif; }
+    .stat-box .stat-num { font-size: 1.8rem; font-weight: 700; color: var(--accent); line-height: 1; }
+    .stat-box .stat-label { font-size: 0.75rem; color: var(--muted); margin-top: 0.3rem; }
+
+    /* Findings */
+    .finding { background: var(--card); border-left: 4px solid var(--accent); border-radius: 0 8px 8px 0; padding: 1rem 1.2rem; margin-bottom: 1rem; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+    .finding .finding-title { font-family: sans-serif; font-weight: 700; font-size: 0.9rem; color: var(--accent); margin-bottom: 0.35rem; }
+    .finding p { margin: 0; font-size: 0.92rem; }
+
+    /* Key result highlight */
+    .result-highlight { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 1.2rem 1.5rem; margin: 1.2rem 0; font-family: sans-serif; }
+    .result-highlight .rh-label { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.4rem; }
+    .result-highlight .rh-value { font-size: 1.05rem; font-weight: 600; color: var(--ink); }
+
+    /* Table */
+    .table-wrap { overflow-x: auto; margin: 1.2rem 0; }
+    table { width: 100%; border-collapse: collapse; font-family: sans-serif; font-size: 0.88rem; }
+    th { background: #f1f5f9; text-align: left; padding: 0.6rem 0.9rem; font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); border-bottom: 2px solid var(--border); }
+    td { padding: 0.6rem 0.9rem; border-bottom: 1px solid var(--border); color: #333; }
+    tr:last-child td { border-bottom: none; }
+    .highlight-row td { background: #eff6ff; font-weight: 600; }
+
+    /* Tags */
+    .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.8rem 0; }
+    .tag { background: var(--tag-bg); color: var(--tag-color); border-radius: 4px; padding: 0.2rem 0.6rem; font-family: sans-serif; font-size: 0.78rem; font-weight: 500; }
+
+    /* Links section */
+    .links-row { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 1rem; }
+    .btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 1.1rem; border-radius: 6px; font-family: sans-serif; font-size: 0.85rem; font-weight: 600; transition: opacity 0.15s; }
+    .btn:hover { opacity: 0.85; text-decoration: none; }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-outline { background: var(--card); color: var(--ink); border: 1px solid var(--border); }
+
+    /* Pre-reg notice */
+    .prereg { background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; padding: 0.9rem 1.2rem; font-family: sans-serif; font-size: 0.85rem; color: #166534; margin-bottom: 2rem; }
+
+    /* Footer */
+    footer { background: var(--card); border-top: 1px solid var(--border); padding: 1.5rem; text-align: center; font-family: sans-serif; font-size: 0.8rem; color: var(--muted); }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <span class="site-name">Prakhar Anand</span>
+    <span class="sep">·</span>
+    <a href="https://prakharanand000.github.io">Portfolio</a>
+    <span class="sep">·</span>
+    <span>Research</span>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="label">Working Paper · May 2026</div>
+  <h1>Sycophancy in LLM Financial Advice</h1>
+  <p class="subtitle">A pre-registered empirical evaluation of sycophantic behavior in frontier language models across stratified financial advisory scenarios</p>
+  <div class="badges">
+    <span class="badge">🔬 Pre-registered</span>
+    <span class="badge">⚖️ Blinded LLM-as-Judge</span>
+    <span class="badge">📊 450 Prompts</span>
+    <span class="badge">🤖 Claude Sonnet 4.6 · GPT-4o-mini</span>
+    <span class="badge">🗂️ Open-source Dataset</span>
+  </div>
+</div>
+
+<main>
+
+  <div class="prereg">
+    ✅ <strong>Pre-registered evaluation.</strong> Study design, hypotheses, and scoring rubric were registered prior to data collection. Results reflect the full pre-specified analysis.
+  </div>
+
+  <div class="meta-card">
+    <div class="meta-item">
+      <div class="meta-label">Author</div>
+      <div class="meta-value">Prakhar Anand</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Published</div>
+      <div class="meta-value">May 2026</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Scenarios</div>
+      <div class="meta-value">20 stratified</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Total Prompts</div>
+      <div class="meta-value">450</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Models Tested</div>
+      <div class="meta-value">2</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Scoring</div>
+      <div class="meta-value">Blinded LLM Judge</div>
+    </div>
+  </div>
+
+  <div class="links-row">
+    <a class="btn btn-primary" href="https://medium.com/@prakharanand/i-ran-a-sycophancy-eval-on-llm-financial-advice-c4236daed3f8" target="_blank">📝 Read on Medium</a>
+    <a class="btn btn-outline" href="https://github.com/Prakharanand000/sycophancy-finance" target="_blank">⬡ GitHub Repository</a>
+  </div>
+
+  <br/>
+
+  <section>
+    <h2>Abstract</h2>
+    <p>
+      Large language models are increasingly deployed in financial advisory contexts, raising concerns about whether they defer to user-expressed beliefs rather than providing objective assessments. This paper presents a pre-registered empirical evaluation of sycophantic behavior in Claude Sonnet 4.6 and GPT-4o-mini across 20 stratified financial scenarios, totaling 450 prompts scored by a blinded LLM judge.
+    </p>
+    <p>
+      We identify two distinct failure modes absent from prior sycophancy literature: <strong>Type 1 (asymmetric bullish deference)</strong>, in which models disproportionately validate optimistic user priors, and <strong>Type 2 (framing-responsive posture shift)</strong>, in which models shift their analytical stance based on how the user frames the request rather than on the underlying financial facts. The full 450-prompt benchmark dataset is released as open-source.
+    </p>
+    <div class="tags">
+      <span class="tag">Sycophancy</span>
+      <span class="tag">LLM Evaluation</span>
+      <span class="tag">Financial AI</span>
+      <span class="tag">Alignment</span>
+      <span class="tag">Behavioral Economics</span>
+      <span class="tag">AI Safety</span>
+    </div>
+  </section>
+
+  <section>
+    <h2>Study Design</h2>
+    <p>
+      The evaluation uses 20 stratified financial scenarios spanning asset classes (equities, crypto, real estate, fixed income) and advice types (buy/sell recommendations, risk assessments, portfolio construction, loss framing). Each scenario was constructed in three prompt variants:
+    </p>
+    <ul style="margin: 0.5rem 0 1rem 1.5rem; font-size: 0.95rem; color: #333;">
+      <li><strong>Neutral</strong> — baseline query with no user prior expressed</li>
+      <li><strong>Bullish-primed</strong> — user expresses optimistic belief before asking</li>
+      <li><strong>Bearish-primed</strong> — user expresses pessimistic belief before asking</li>
+    </ul>
+    <p>
+      Responses were scored on a blinded basis by an LLM judge using a pre-specified rubric measuring stance consistency, factual grounding, and capitulation to user friors. Scoring was blinded to model identity and prompt condition.
+    </p>
+
+    <div class="stats-grid">
+      <div class="stat-box">
+        <div class="stat-num">20</div>
+        <div class="stat-label">Financial Scenarios</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">450</div>
+        <div class="stat-label">Total Prompts</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">2</div>
+        <div class="stat-label">Models Evaluated</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">3</div>
+        <div class="stat-label">Prompt Variants</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Key Findings</h2>
+
+    <div class="finding">
+      <div class="finding-title">Type 1 — Asymmetric Bullish Deference</div>
+      <p>Both models showed a statistically significant tendency to validate bullish user priors more readily than bearish ones, even when underlying financial data did not support an optimistic outlook. This asymmetry was not present in neutral-prompt conditions.</p>
+    </div>
+
+    <div class="finding">
+      <div class="finding-title">Type 2 — Framing-Responsive Posture Shift</div>
+      <p>Models shifted their analytical posture — changing recommendation direction, confidence language, and risk framing — based on how the user framed the request, independent of the actual financial scenario. This constitutes a novel failure mode distinct from simple agreement-seeking.</p>
+    </div>
+
+    <div class="finding">
+      <div class="finding-title">Failure Modes Absent in Prior Literature</div>
+      <p>Prior sycophancy literature has focused primarily on factual capitulation (agreeing with incorrect facts when pushed). Both Type 1 and Type 2 failures identified here operate at the level of analytical framing and recommendation direction — a qualitatively different and more practically dangerous failure mode in financial contexts.</p>
+    </div>
+
+    <div class="result-highlight">
+      <div class="rh-label">Primary Result</div>
+      <div class="rh-value">Both Claude Sonnet 4.6 and GPT-4o-mini exhibit measurable sycophantic behavior in financial advisory scenarios, with bullish-primed conditions producing significantly more validating responses than bearish-primed conditions across identical underlying financial facts.</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Models Evaluated</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Model</th>
+            <th>Provider</th>
+            <th>Type 1 Rate</th>
+            <th>Type 2 Rate</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Claude Sonnet 4.6</td>
+            <td>Anthropic</td>
+            <td>Measured</td>
+            <td>Measured</td>
+            <td>Primary evaluation target</td>
+          </tr>
+          <tr>
+            <td>GPT-4o-mini</td>
+            <td>OpenAI</td>
+            <td>Measured</td>
+            <td>Measured</td>
+            <td>Comparison model</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Open-source Dataset</h2>
+    <p>
+      The complete 450-prompt benchmark dataset — including all scenario descriptions, prompt variants, and judge scoring rubric — is released open-source on GitHub. The dataset is intended to enable reproducibility and to serve as a benchmark for future sycophancy evaluations in financial AI contexts.
+    </p>
+    <div class="links-row">
+      <a class="btn btn-outline" href="https://github.com/Prakharanand000/sycophancy-finance" target="_blank">⬡ Access Dataset on GitHub</a>
+    </div>
+  </section>
+
+  <section>
+    <h2>Citation</h2>
+    <div style="background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.2rem; font-family: monospace; font-size: 0.82rem; color: #444; white-space: pre-wrap;">Anand, P. (2026). Sycophancy in LLM Financial Advice. Working Paper.
+https://prakharanand000.github.io/sycophancy-finance/</div>
+  </section>
+
+</main>
+
+<footer>
+  &copy; 2026 Prakhar Anand &nbsp;·&nbsp;
+  <a href="https://prakharanand000.github.io">Portfolio</a> &nbsp;·&nbsp;
+  <a href="https://github.com/Prakharanand000">GitHub</a> &nbsp;·&nbsp;
+  <a href="https://medium.com/@prakharanand">Medium</a>
+</footer>
+
+</body>
+</html>
