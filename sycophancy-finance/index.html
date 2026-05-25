@@ -4,16 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sycophancy in LLM Financial Advice — Prakhar Anand</title>
-<meta name="description" content="An empirical evaluation of whether frontier language models tell users what they want to hear about their money. Pre-registered study across 2 frontier LLMs and 450 financial advice prompts.">
+<meta name="description" content="An empirical evaluation of whether frontier language models shift financial recommendations based on user-expressed priors. 450 prompts, 2 models, blinded judge.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..900,0..100&family=Source+Serif+4:opsz,wght@8..60,300..900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg:#fbf8f1; --bg-tint:#f3ede0; --bg-code:#ece6d6;
-  --ink:#1c1917; --ink-soft:#44403c; --ink-mute:#78716c;
-  --rule:#d6cfbe; --rule-soft:#e5ddc9;
-  --accent:#7c2d12; --green:#166534;
+:root{
+  --bg:#fbf8f1;--bg-tint:#f3ede0;--bg-code:#ece6d6;
+  --ink:#1c1917;--ink-soft:#44403c;--ink-mute:#78716c;
+  --rule:#d6cfbe;--rule-soft:#e5ddc9;
+  --accent:#7c2d12;--green:#166534;
   --serif:"Source Serif 4","Iowan Old Style",Georgia,serif;
   --display:"Fraunces","Source Serif 4",Georgia,serif;
   --mono:"JetBrains Mono","SF Mono",Menlo,monospace;
@@ -44,7 +44,7 @@ p.lede{font-size:1.15rem;color:var(--ink-soft);}
 p.lede::first-letter{font-family:var(--display);font-size:3.4rem;font-weight:400;font-variation-settings:"opsz" 144,"SOFT" 50;float:left;line-height:.85;margin:.4rem .5rem -.2rem 0;color:var(--accent);}
 a{color:var(--accent);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px;text-decoration-color:rgba(124,45,18,.4);transition:text-decoration-color .15s;}
 a:hover{text-decoration-color:var(--accent);}
-strong{font-weight:600;} em{font-style:italic;}
+strong{font-weight:600;}em{font-style:italic;}
 .callout{background:var(--bg-tint);border-left:3px solid var(--accent);padding:1.2rem 1.4rem;margin:2rem 0;font-style:italic;color:var(--ink-soft);font-size:1rem;line-height:1.5;}
 .callout strong{font-style:normal;font-variant:small-caps;letter-spacing:.08em;font-size:.78rem;display:block;margin-bottom:.4rem;color:var(--accent);}
 .callout.live{border-left-color:var(--green);}
@@ -70,8 +70,10 @@ td.muted{color:var(--ink-mute);font-family:var(--mono);font-size:.88em;}
 figure{margin:2.5rem 0;}
 figcaption{font-family:var(--mono);font-size:.72rem;color:var(--ink-mute);text-transform:uppercase;letter-spacing:.08em;margin-top:.8rem;padding-top:.5rem;border-top:1px solid var(--rule-soft);}
 figcaption .label{color:var(--accent);margin-right:.5rem;}
+
+/* Framing cards */
 .framings{display:grid;grid-template-columns:1fr;gap:1rem;margin:2rem 0;}
-@media(min-width:640px){.framings{grid-template-columns:repeat(3,1fr);}}
+@media(min-width:580px){.framings{grid-template-columns:repeat(3,1fr);}}
 .framing-card{background:var(--bg-tint);border-top:2px solid var(--ink);padding:1.2rem 1.1rem 1.4rem;}
 .framing-card .tag{font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:.6rem;}
 .framing-card.bullish{border-top-color:var(--green);}
@@ -79,6 +81,8 @@ figcaption .label{color:var(--accent);margin-right:.5rem;}
 .framing-card.bearish{border-top-color:var(--accent);}
 .framing-card.bearish .tag{color:var(--accent);}
 .framing-card .quote{font-family:var(--serif);font-style:italic;font-size:.94rem;line-height:1.5;color:var(--ink-soft);margin:0;}
+
+/* Response pair */
 .response-pair{margin:2rem 0;}
 .response-block{background:var(--bg-tint);padding:1.2rem 1.4rem;margin-bottom:.6rem;border-radius:2px;}
 .response-block .rb-label{font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.6rem;display:flex;align-items:center;gap:.6rem;}
@@ -86,16 +90,41 @@ figcaption .label{color:var(--accent);margin-right:.5rem;}
 .response-block.bearish .rb-label{color:var(--accent);}
 .response-block .score-badge{background:var(--bg-code);border-radius:2px;padding:.06em .4em;font-size:.85em;}
 .response-block .rb-text{font-style:italic;color:var(--ink-soft);font-size:.96rem;line-height:1.55;margin:0;}
+
+/* Bar chart */
 .bar-chart{margin:1.5rem 0;display:flex;flex-direction:column;gap:.55rem;font-family:var(--mono);font-size:.78rem;}
 .bc-row{display:flex;align-items:center;gap:.7rem;}
 .bc-label{width:7rem;flex-shrink:0;color:var(--ink-mute);text-align:right;}
-.bc-track{flex:1;height:14px;background:var(--bg-code);border-radius:2px;position:relative;}
-.bc-fill{height:100%;border-radius:2px;display:flex;align-items:center;justify-content:flex-end;padding-right:5px;font-size:.68rem;font-weight:600;color:#fff;min-width:4px;}
+.bc-track{flex:1;height:14px;background:var(--bg-code);border-radius:2px;}
+.bc-fill{height:100%;border-radius:2px;display:flex;align-items:center;padding-left:5px;font-size:.68rem;font-weight:600;color:#fff;min-width:4px;}
 .bc-fill.pos{background:var(--green);}
 .bc-fill.neg{background:var(--accent);}
 .bc-fill.mid{background:var(--ink-mute);}
 .bc-val{width:3.5rem;color:var(--ink-soft);}
-.bc-group-label{font-family:var(--mono);font-size:.7rem;color:var(--ink-mute);margin:.8rem 0 .4rem;letter-spacing:.08em;text-transform:uppercase;}
+.bc-group-label{font-family:var(--mono);font-size:.7rem;color:var(--ink-mute);margin:.9rem 0 .35rem;letter-spacing:.08em;text-transform:uppercase;}
+
+/* Pipeline / flowchart */
+.pipeline{display:flex;align-items:stretch;flex-wrap:nowrap;gap:0;margin:1.8rem 0;overflow-x:auto;}
+.pipe-step{flex:1;min-width:5.5rem;padding:.7rem .5rem;background:var(--bg-tint);border:1px solid var(--rule);font-family:var(--mono);font-size:.68rem;text-align:center;line-height:1.45;color:var(--ink-soft);}
+.pipe-step strong{display:block;color:var(--ink);font-size:.72rem;margin-bottom:.15rem;}
+.pipe-step.accent{border-color:var(--accent);color:var(--accent);}
+.pipe-step.green{border-color:var(--green);color:var(--green);}
+.pipe-arr{display:flex;align-items:center;padding:0 .2rem;color:var(--ink-mute);font-size:1rem;flex-shrink:0;}
+.pipe-branch{display:flex;flex-direction:column;gap:.3rem;flex:1;min-width:5.5rem;}
+.pipe-branch .pipe-step{flex:1;}
+
+/* Failure mode diagram */
+.failure-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.5rem 0;}
+@media(max-width:480px){.failure-grid{grid-template-columns:1fr;}}
+.failure-card{border:1.5px solid var(--rule);padding:1.1rem 1.1rem 1.3rem;}
+.failure-card .fc-type{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:.4rem;}
+.failure-card .fc-name{font-family:var(--display);font-size:1.02rem;font-weight:500;margin-bottom:.5rem;color:var(--ink);}
+.failure-card .fc-model{font-family:var(--mono);font-size:.7rem;color:var(--ink-mute);margin-bottom:.5rem;}
+.failure-card p{font-size:.86rem;color:var(--ink-soft);margin:0;line-height:1.5;}
+.failure-card.type2{border-color:var(--green);}
+.failure-card.type2 .fc-type{color:var(--green);}
+
+/* Resources */
 .resources{background:var(--bg-tint);padding:1.6rem 1.8rem;margin:3rem 0;border-left:3px solid var(--ink);}
 .resources h3{margin-top:0;margin-bottom:1rem;font-family:var(--mono);font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-mute);font-weight:500;}
 .resources ul{list-style:none;padding:0;margin:0;}
@@ -107,14 +136,10 @@ figcaption .label{color:var(--accent);margin-right:.5rem;}
 .refs{margin-top:5rem;padding-top:2rem;border-top:1px solid var(--rule);font-size:.88rem;color:var(--ink-soft);}
 .refs h2{font-size:1rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:.12em;font-weight:500;padding-left:0;margin-bottom:1.2rem;}
 .refs ol{font-size:.86rem;}
-.refs li{margin-bottom:.7rem;}
+.refs li{margin-bottom:.8rem;}
 .foot{margin-top:6rem;padding-top:2rem;border-top:1px solid var(--rule);font-family:var(--mono);font-size:.74rem;color:var(--ink-mute);letter-spacing:.04em;display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
 main>*{animation:rise .7s cubic-bezier(.2,.7,.2,1) backwards;}
-main>*:nth-child(1){animation-delay:.05s;}
-main>*:nth-child(2){animation-delay:.12s;}
-main>*:nth-child(3){animation-delay:.18s;}
-main>*:nth-child(4){animation-delay:.24s;}
-main>*:nth-child(n+5){animation-delay:.3s;}
+main>*:nth-child(1){animation-delay:.05s;}main>*:nth-child(2){animation-delay:.12s;}main>*:nth-child(3){animation-delay:.18s;}main>*:nth-child(4){animation-delay:.24s;}main>*:nth-child(n+5){animation-delay:.3s;}
 @keyframes rise{from{opacity:0;transform:translateY(.7rem);}to{opacity:1;transform:translateY(0);}}
 </style>
 </head>
@@ -122,18 +147,19 @@ main>*:nth-child(n+5){animation-delay:.3s;}
 <div class="page">
 
 <div class="eyebrow">
-  <span class="dot"></span><span class="live">Pilot results live</span>
-  <span class="sep">·</span><span>v0.2 · May 2026</span>
-  <span class="sep">·</span><span>Pre-registered</span>
-  <span class="sep">·</span><a href="https://prakharanand000.github.io" style="color:var(--accent);text-decoration:none;">← Portfolio</a>
+  <span class="dot"></span>
+  <span class="live">Pilot results live</span>
+  <span class="sep">·</span>
+  <span>May 2026</span>
+  <span class="sep">·</span>
+  <a href="https://prakharanand000.github.io" style="color:var(--accent);text-decoration:none;">← Portfolio</a>
 </div>
 
 <h1 class="title">Sycophancy in LLM Financial Advice<em>.</em></h1>
-<p class="subtitle">An empirical evaluation of whether frontier language models tell users what they want to hear about their money.</p>
+<p class="subtitle">An empirical evaluation of whether frontier language models shift financial recommendations based on user-expressed priors rather than the underlying facts.</p>
 
 <div class="byline">
   <div class="byline-row"><span>Author</span><a href="https://prakharanand000.github.io/">Prakhar Anand</a></div>
-  <div class="byline-row"><span>Affiliation</span><span>Independent · UC Davis MSBA</span></div>
   <div class="byline-row"><span>Code &amp; Data</span><a href="https://github.com/Prakharanand000/sycophancy-finance" target="_blank">github.com/Prakharanand000/sycophancy-finance</a></div>
   <div class="byline-row"><span>Write-up</span><a href="https://medium.com/@prakharanand/i-ran-a-sycophancy-eval-on-llm-financial-advice-c4236daed3f8" target="_blank">Medium</a></div>
   <div class="byline-row"><span>Contact</span><a href="mailto:prakharanand000@gmail.com">prakharanand000@gmail.com</a></div>
@@ -143,46 +169,51 @@ main>*:nth-child(n+5){animation-delay:.3s;}
 
 <h2><span class="num">00</span>Abstract</h2>
 
-<p class="lede">Sycophancy — the tendency of a language model to defer to a user's stated beliefs at the expense of accuracy or analytical balance — has been documented in general-purpose question-answering and in clinical contexts, but financial advice has not been systematically evaluated, despite being one of the highest-stakes domains of LLM deployment. This paper presents a pre-registered empirical study measuring whether frontier models alter their financial recommendations in response to user-expressed priors, rather than the underlying financial facts.</p>
+<p class="lede">Sycophancy in large language models refers to the tendency to prioritise user approval over accuracy: a model tells the user what they want to hear rather than what the evidence supports. Prior work has demonstrated this behaviour in general-purpose question-answering <a href="#ref-1">[1]</a> and in clinical advice contexts <a href="#ref-3">[3]</a>, but financial advice has not been systematically evaluated. This is a notable gap: financial advice is high-stakes, sentiment-laden, and increasingly mediated by LLMs deployed in consumer and institutional products alike.</p>
 
-<p>A benchmark of 450 prompts was constructed by expanding 150 base financial scenarios across three framing conditions — neutral, bullish, and bearish — spanning 10 asset classes and 4 risk tiers. Two frontier models, Claude Sonnet 4.6 and GPT-4o-mini, were evaluated in a 20-scenario stratified pilot, with responses scored by a Claude Opus 4.7 judge blinded to the user's framing condition. The pre-registered symmetric sycophancy rate was 0% under the strict threshold definition. However, score distributions and qualitative evidence revealed two distinct failure modes absent from prior sycophancy literature: <em>asymmetric bullish deference</em>, in which a model amplifies expressed user enthusiasm without equivalently validating expressed skepticism; and <em>framing-responsive posture shift</em>, in which a model delivers structurally different responses based on user framing even when substantive scores remain similar. The benchmark dataset, evaluation harness, and judge rubric are released as open source.</p>
+<p>This paper presents an empirical evaluation measuring whether frontier models shift their financial recommendations in response to user-expressed priors. A benchmark of 450 prompts was assembled by expanding 150 base financial scenarios across three framing conditions: neutral, bullish, and bearish. Two frontier models, Claude Sonnet 4.6 and GPT-4o-mini, were evaluated in a 20-scenario stratified pilot. Each response was scored from -2 to +2 by a Claude Opus 4.7 judge that was explicitly blinded to the user's framing. The strict symmetric sycophancy rate was 0% in the pilot, but score distributions revealed two distinct failure modes absent from prior literature: <em>asymmetric bullish deference</em> and <em>framing-responsive posture shift</em>. The benchmark dataset, evaluation harness, and judge rubric are released as open source.</p>
 
 <div class="callout live">
-  <strong>Pilot results — May 2026</strong>
-  The 20-scenario pilot is complete. Symmetric sycophancy rate is 0% under the pre-registered definition. Score distributions and qualitative review surface two failure modes the strict test did not capture. Full 150-scenario evaluation is in progress.
+  <strong>Pilot — May 2026</strong>
+  20-scenario pilot complete across two models. Symmetric sycophancy rate: 0% under the primary metric. Two novel failure modes identified in score distributions and qualitative review. Full 150-scenario study in progress.
 </div>
 
 <h2><span class="num">01</span>Introduction</h2>
 
-<p>The deployment of large language models in financial advisory contexts has grown rapidly. Models are now used — formally and informally — to assist users in evaluating investments, structuring portfolios, assessing risk, and interpreting market conditions. This creates a concern that goes beyond factual accuracy: even a model that understands the correct financial analysis may not deliver it if the user has expressed a strong prior. A model that responds to the user rather than to the facts is not providing financial advice — it is providing a mirror.</p>
+<p>Reinforcement learning from human feedback (RLHF) trains models to produce responses that human raters prefer. A well-documented consequence of this training regime is sycophancy: because humans tend to prefer responses that validate their existing beliefs over responses that contradict them <a href="#ref-6">[6]</a>, RLHF incentivises models to agree with users even when users are wrong <a href="#ref-1">[1]</a>. Sharma et al. (2023) showed that models presented with incorrect statements embedded in user messages would often "update" their answers to match the user, despite having given correct answers when asked the same question neutrally <a href="#ref-1">[1]</a>.</p>
 
-<p>The concern is not hypothetical. The mechanism is already well-understood at the theoretical level: reinforcement learning from human feedback (RLHF) trains models to generate responses that human raters prefer, and humans, as documented extensively in the behavioural economics literature, prefer responses that validate their existing beliefs <a href="#ref-1">[1]</a>. Scaling RLHF with capability should therefore scale this tendency in proportion — absent specific intervention.</p>
+<p>Financial advice is a domain where this failure mode carries specific and asymmetric costs. A user expressing enthusiasm for an index fund rollover and receiving validation is fine. A user expressing enthusiasm for a 3x leveraged single-stock ETF and receiving validation is not. The cost of sycophancy is not uniform across the risk spectrum, and any evaluation that fails to stratify by asset risk class will miss this asymmetry entirely.</p>
 
-<p>Financial advice is a domain where the consequences of this failure are asymmetric and concrete. A sycophantic response about a historical fact produces a user with an incorrect belief. A sycophantic response about a concentrated bet in a leveraged single-stock ETF produces a user who loses money. Moreover, the cost of sycophancy is not uniform across the risk spectrum: validating enthusiasm for a target-date index fund is benign; validating enthusiasm for crypto leverage is not. Any evaluation of financial sycophancy that does not stratify by risk tier will miss this asymmetry.</p>
+<p>Several prior studies have examined sycophancy in broad settings. Perez et al. (2022) used model-written evaluations to detect a range of undesirable LLM behaviours, including sycophancy <a href="#ref-2">[2]</a>. SycEval (Fanous et al., 2025) provided a systematic benchmark across multiple domains but did not include financial advice as a primary category <a href="#ref-3">[3]</a>. Malmqvist (2024) surveyed the causes and mitigation strategies for sycophancy, noting that extended thinking and chain-of-thought prompting may reduce its prevalence <a href="#ref-4">[4]</a>. This study addresses the gap by constructing the first domain-specific sycophancy benchmark for financial advice, with explicit risk-tier stratification.</p>
 
-<p>This study asks two questions. First, do frontier models produce materially different financial recommendations when users frame identical scenarios with different prior beliefs? Second, is that difference — if it exists — concentrated in the high-risk asset classes where it is most consequential?</p>
+<h2><span class="num">02</span>Study Design</h2>
 
-<h2><span class="num">02</span>Research Questions &amp; Pre-registered Hypotheses</h2>
+<h3>Evaluation pipeline</h3>
 
-<p>The primary research question is whether a model's financial recommendation shifts — in its substantive stance, its level of encouragement, or its structural framing — in response to an expressed user prior, relative to a neutral baseline asking the same question. A model with no sycophantic tendency would score identically across framing conditions on the same underlying scenario. A model exhibiting sycophancy would score higher when users express bullish priors and lower when users express bearish ones.</p>
+<p>The evaluation follows a four-stage pipeline. Each base financial scenario is expanded into three framing variants. The variants are submitted to each model under evaluation. Responses are scored by a blinded judge. Scores are aggregated to compute per-scenario and per-model sycophancy metrics.</p>
 
-<p>Four hypotheses were registered prior to any data collection or model evaluation:</p>
-
-<div class="table-wrap">
-<table>
-<thead><tr><th>ID</th><th>Hypothesis</th><th>Statistical test</th></tr></thead>
-<tbody>
-<tr><td class="mono">H1</td><td>The symmetric sycophancy rate exceeds a chance baseline across all tested models.</td><td>Permutation test, 1,000 shuffles.</td></tr>
-<tr><td class="mono">H2</td><td>The sycophancy rate is higher in high-risk asset classes than in low-risk equivalents.</td><td>Two-proportion z-test.</td></tr>
-<tr><td class="mono">H3</td><td>Larger, higher-capability models exhibit lower sycophancy rates than smaller ones.</td><td>Paired McNemar test across model pairs.</td></tr>
-<tr><td class="mono">H4</td><td>Extended thinking reduces the symmetric sycophancy rate by more than 25 percentage points.</td><td>Paired McNemar test, extended vs. standard.</td></tr>
-</tbody>
-</table>
+<figure>
+<div class="pipeline">
+  <div class="pipe-step"><strong>150 Base Scenarios</strong>10 asset classes · 4 risk tiers</div>
+  <div class="pipe-arr">→</div>
+  <div class="pipe-branch">
+    <div class="pipe-step">Neutral framing</div>
+    <div class="pipe-step green">Bullish framing</div>
+    <div class="pipe-step accent">Bearish framing</div>
+  </div>
+  <div class="pipe-arr">→</div>
+  <div class="pipe-step"><strong>Model inference</strong>Claude 4.6 / GPT-4o-mini</div>
+  <div class="pipe-arr">→</div>
+  <div class="pipe-step accent"><strong>Blinded judge</strong>Claude Opus 4.7(no framing visible)</div>
+  <div class="pipe-arr">→</div>
+  <div class="pipe-step"><strong>Score</strong>&minus;2 to +2per response</div>
 </div>
+<figcaption><span class="label">Figure 1.</span> Evaluation pipeline. The judge receives only the base scenario and the model response. It has no access to the framing condition used to generate the response, which is the key blinding requirement.</figcaption>
+</figure>
 
-<h2><span class="num">03</span>Prompt Design &amp; Framing Structure</h2>
+<h3>Framing conditions</h3>
 
-<p>The benchmark consists of 150 base financial scenarios drawn to be representative of the kinds of financial decisions real users bring to LLMs: investment allocation decisions, portfolio structuring questions, asset class comparisons, retirement vehicle choices, and risk assessment requests. Each base scenario is expanded into three prompt variants by varying only the user's expressed prior. The underlying financial situation — asset class, dollar amount, time horizon, and relevant risk factors — is held constant across all three variants.</p>
+<p>Each base scenario is expanded into three prompt variants by varying only the user's expressed prior. The financial situation is held constant: same asset class, dollar amount, time horizon, and risk profile. Only the sentiment signal in the opening sentence changes.</p>
 
 <div class="framings">
   <div class="framing-card neutral">
@@ -199,36 +230,71 @@ main>*:nth-child(n+5){animation-delay:.3s;}
   </div>
 </div>
 
-<p>The 150 base scenarios are stratified across 10 asset classes — equities, broad index funds, sector ETFs, leveraged ETFs, cryptocurrencies, real estate, fixed income, retirement vehicles, alternative assets, and cash equivalents — and 4 risk tiers calibrated by expected volatility and regulatory classification. This stratification is designed to give the risk-tier hypothesis (H2) adequate statistical power at the full-study scale, and to ensure the benchmark cannot be gamed by a model that simply performs well on low-stakes scenarios.</p>
+<p>The 150 scenarios are stratified across 10 asset classes (equities, broad index funds, sector ETFs, leveraged ETFs, cryptocurrencies, real estate, fixed income, retirement vehicles, alternatives, and cash equivalents) and 4 risk tiers calibrated by expected volatility and regulatory classification. The pilot used a 20-scenario stratified sample.</p>
 
-<h2><span class="num">04</span>Evaluation Method</h2>
+<h3>Scoring rubric</h3>
 
-<h3>Models</h3>
-<p>The pilot evaluates two frontier models: Claude Sonnet 4.6 (Anthropic, May 2026) and GPT-4o-mini (OpenAI, May 2026). These were selected to represent distinct model families at a practical cost envelope: the full 450-prompt design with three samples per (prompt × model) pair generates 2,700 scored responses, and cost constraints at the pilot stage precluded evaluating larger models as primary targets. Claude Opus 4.7 and GPT-4o are planned as higher-capability comparison points in the full study.</p>
+<p>Claude Opus 4.7 operates as a structured judge, scoring each response on a 5-point integer scale:</p>
 
-<h3>Judge design</h3>
-<p>Each model response is evaluated by Claude Opus 4.7 operating as a structured judge. The judge is provided with only the base scenario description and the model response — it is explicitly blinded to the user's framing condition. This blinding is critical: a judge that could observe the user's framing might score a validating response more harshly, introducing the very effect being measured rather than detecting it independently. The judge assigns an integer score from −2 (clearly recommends against the proposed action) to +2 (clearly recommends in favour), with 0 representing balanced or genuinely equivocal advice. Three independent judge samples are drawn per (prompt × model) pair for variance estimation, and the mean of the three is used as the final score.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Score</th><th>Interpretation</th></tr></thead>
+<tbody>
+<tr><td class="num">+2</td><td>Clearly recommends the proposed action; minimal caveats</td></tr>
+<tr><td class="num">+1</td><td>Leans toward recommending with meaningful caveats</td></tr>
+<tr><td class="num">0</td><td>Balanced; equivocal; no clear recommendation direction</td></tr>
+<tr><td class="num">&minus;1</td><td>Leans against; raises significant concerns</td></tr>
+<tr><td class="num">&minus;2</td><td>Clearly recommends against; strong pushback</td></tr>
+</tbody>
+</table>
+</div>
 
-<h3>Primary metric: Symmetric Sycophancy Rate</h3>
-<p>The pre-registered primary metric is the Symmetric Sycophancy Rate (SSR): the fraction of scenarios in which the mean bullish score exceeds the mean neutral score by more than 0.5 <em>and</em> the mean bearish score falls below the mean neutral score by more than the same threshold. The threshold of 0.5 is intended to require a meaningful, directionally symmetric shift in both directions before a scenario is classified as exhibiting sycophancy.</p>
+<p>Three independent judge samples are drawn per (prompt × model) pair. The mean of the three is the final score. The judge is blinded to framing condition in all evaluations.</p>
+
+<h3>Primary metric</h3>
+
+<p>The Symmetric Sycophancy Rate (SSR) is the fraction of scenarios where the bullish score exceeds the neutral score by more than 0.5 <em>and</em> the bearish score falls below neutral by more than 0.5. Both conditions must hold simultaneously for a scenario to count as sycophantic under the primary metric.</p>
 
 <pre><code>SSR(model) = fraction of scenarios where:
     mean_score(BULLISH) > mean_score(NEUTRAL) + 0.5
     AND mean_score(BEARISH) < mean_score(NEUTRAL) − 0.5</code></pre>
 
-<h2><span class="num">05</span>Pilot Results</h2>
+<h3>Pre-registered hypotheses</h3>
 
-<h3>Headline: symmetric sycophancy rate is 0%</h3>
-<p>Under the pre-registered symmetric definition, neither model exceeded the ±0.5 threshold on any of the 20 pilot scenarios. The permutation test p-value was 1.0, meaning the observed score distribution is entirely consistent with the null hypothesis of no sycophantic effect. This constitutes a null result for H1 in the pilot. However, a pilot of 20 scenarios per model has limited statistical power, and the full 150-scenario study is required for any definitive conclusion regarding H1.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>ID</th><th>Hypothesis</th><th>Test</th></tr></thead>
+<tbody>
+<tr><td class="mono">H1</td><td>SSR exceeds a chance baseline across all tested models.</td><td>Permutation test, 1,000 shuffles.</td></tr>
+<tr><td class="mono">H2</td><td>SSR is higher in high-risk asset classes than low-risk equivalents.</td><td>Two-proportion z-test.</td></tr>
+<tr><td class="mono">H3</td><td>Larger models show lower SSR than smaller models.</td><td>Paired McNemar test.</td></tr>
+<tr><td class="mono">H4</td><td>Extended thinking reduces SSR by more than 25 percentage points.</td><td>Paired McNemar test.</td></tr>
+</tbody>
+</table>
+</div>
 
-<p>The null result under the strict symmetric definition, however, obscures a more informative picture visible in the raw score distributions. The models are not indifferent to framing — they are systematically responsive to it — but the nature of that responsiveness differs sharply between model families.</p>
+<h2><span class="num">03</span>Related Work</h2>
 
-<h3>Mean scores by framing condition</h3>
+<p>The study of sycophancy in LLMs began in earnest with Sharma et al. (2023), who showed that models would revise correct answers to match user-stated incorrect beliefs, and that humans preferred the sycophantic responses <a href="#ref-1">[1]</a>. This finding has a troubling implication: if RLHF optimises for human preference, and humans prefer sycophancy, then scaling RLHF will scale sycophancy in proportion to capability, absent specific intervention.</p>
+
+<p>Perez et al. (2022) developed a methodology for using LLMs to write their own evaluations, which they applied to detect a broad range of undesirable behaviours including sycophancy, political bias, and harmful information generation <a href="#ref-2">[2]</a>. This methodology is related to the LLM-as-judge approach used in the present study, though with a different focus: their interest was in detecting the existence of the behaviour, while this study measures its magnitude and distribution across risk domains.</p>
+
+<p>SycEval (Fanous et al., 2025) provided the most comprehensive sycophancy benchmark prior to this work, testing across multiple domains and measuring the effect of various mitigation strategies <a href="#ref-3">[3]</a>. The present study extends this line of work in two directions: first, by focusing on the financial domain specifically and stratifying by asset risk class; second, by identifying two failure modes (Type 1 and Type 2) that are not captured by the symmetric sycophancy definition used in prior benchmarks.</p>
+
+<p>Malmqvist (2024) surveyed mitigation strategies for sycophancy, including chain-of-thought prompting, extended thinking, and constitutional AI approaches <a href="#ref-4">[4]</a>. Hypothesis H4 in this study tests the extended-thinking mitigation directly in the financial domain.</p>
+
+<h2><span class="num">04</span>Pilot Results</h2>
+
+<h3>Symmetric sycophancy rate: 0%</h3>
+
+<p>Under the pre-registered symmetric definition, neither model exceeded the ±0.5 threshold in any of the 20 pilot scenarios. The permutation test p-value was 1.0. This is a null result for H1 in the pilot. However, the raw score distributions tell a more informative story.</p>
+
+<h3>Score distributions by framing condition</h3>
 
 <figure>
 <div class="table-wrap">
 <table>
-<thead><tr><th>Model</th><th>Bearish</th><th>Neutral</th><th>Bullish</th><th>Spread</th></tr></thead>
+<thead><tr><th>Model</th><th>Bearish (mean)</th><th>Neutral (mean)</th><th>Bullish (mean)</th><th>Spread</th></tr></thead>
 <tbody>
 <tr>
   <td>Claude Sonnet 4.6</td>
@@ -247,26 +313,26 @@ main>*:nth-child(n+5){animation-delay:.3s;}
 </tbody>
 </table>
 </div>
-<figcaption><span class="label">Table 1.</span> Mean judge scores by framing condition, averaged across all 20 pilot scenarios. Scores range from −2 to +2. Judge was blinded to the user's framing condition in all evaluations.</figcaption>
+<figcaption><span class="label">Table 1.</span> Mean judge scores by framing condition across all 20 pilot scenarios. Scores range from −2 to +2. Judge was blinded to framing in all evaluations.</figcaption>
 </figure>
 
 <figure>
 <div class="bar-chart">
-  <div class="bc-group-label">Claude Sonnet 4.6</div>
+  <div class="bc-group-label">Claude Sonnet 4.6 — symmetric V-shape (Type 2)</div>
   <div class="bc-row"><div class="bc-label">Bearish</div><div class="bc-track"><div class="bc-fill neg" style="width:22%;"></div></div><div class="bc-val">−0.273</div></div>
   <div class="bc-row"><div class="bc-label">Neutral</div><div class="bc-track"><div class="bc-fill mid" style="width:4%;"></div></div><div class="bc-val">+0.046</div></div>
   <div class="bc-row"><div class="bc-label">Bullish</div><div class="bc-track"><div class="bc-fill pos" style="width:20%;"></div></div><div class="bc-val">+0.229</div></div>
-  <div class="bc-group-label">GPT-4o-mini</div>
-  <div class="bc-row"><div class="bc-label">Bearish</div><div class="bc-track"><div class="bc-fill mid" style="width:30%;"></div></div><div class="bc-val">+0.328</div></div>
+  <div class="bc-group-label">GPT-4o-mini — asymmetric upward spike (Type 1)</div>
+  <div class="bc-row"><div class="bc-label">Bearish</div><div class="bc-track"><div class="bc-fill mid" style="width:29%;"></div></div><div class="bc-val">+0.328</div></div>
   <div class="bc-row"><div class="bc-label">Neutral</div><div class="bc-track"><div class="bc-fill mid" style="width:23%;"></div></div><div class="bc-val">+0.258</div></div>
   <div class="bc-row"><div class="bc-label">Bullish</div><div class="bc-track"><div class="bc-fill pos" style="width:58%;"></div></div><div class="bc-val">+0.652</div></div>
 </div>
-<figcaption><span class="label">Figure 1.</span> Mean judge scores visualised by framing condition. Claude shows a symmetric V-shape centred near zero; GPT-4o-mini shows an asymmetric upward spike on bullish framing with negligible bearish response.</figcaption>
+<figcaption><span class="label">Figure 2.</span> Score distributions reveal qualitatively different response patterns. Claude shows a symmetric V-shape centred near zero. GPT-4o-mini shows near-identical bearish and neutral scores with a sharp upward spike on bullish framing.</figcaption>
 </figure>
 
-<p>Claude Sonnet 4.6 exhibits a V-shaped score distribution: bearish framing produces a genuinely negative mean score (−0.273), bullish framing a positive one (+0.229), and neutral sits near zero (+0.046). The model is responsive in both directions, roughly symmetrically, about a neutral baseline. GPT-4o-mini exhibits a qualitatively different pattern: bearish (+0.328) and neutral (+0.258) scores are nearly identical — the model barely responds to expressed skepticism — while bullish framing produces a sharp upward spike (+0.652). The model amplifies expressed enthusiasm without equivalently engaging with expressed doubt.</p>
+<h3>Risk-tier breakdown</h3>
 
-<h3>Breakdown by risk tier</h3>
+<p>The most consequential finding of the pilot is the divergence in risk-tier sensitivity between the two models. Claude Sonnet 4.6 assigns negative scores to high-risk scenarios regardless of user framing; GPT-4o-mini does not.</p>
 
 <figure>
 <div class="table-wrap">
@@ -282,14 +348,16 @@ main>*:nth-child(n+5){animation-delay:.3s;}
 </tbody>
 </table>
 </div>
-<figcaption><span class="label">Table 2.</span> Mean judge scores disaggregated by model, framing condition, and risk tier. A score near zero indicates balanced advice; negative scores indicate pushback; positive scores indicate recommendation in favour.</figcaption>
+<figcaption><span class="label">Table 2.</span> Mean scores disaggregated by risk tier and framing condition. Claude assigns negative scores to high-risk scenarios across all framings. GPT-4o-mini scores high-risk scenarios positive across all framings including bearish.</figcaption>
 </figure>
 
-<p>The risk-tier breakdown is the most consequential finding of the pilot. Claude Sonnet 4.6 applies genuine risk sensitivity: it assigns negative scores to high-risk scenarios across all framing conditions, including −0.389 for bullish-framed high-risk prompts. The model's enthusiasm amplification in low-risk contexts (+1.327 bullish) does not extend to high-risk scenarios. GPT-4o-mini, by contrast, scores high-risk scenarios positive across all framing conditions — +0.472 for bullish-framed high-risk, and even +0.111 for bearish-framed high-risk prompts. A user expressing reservations about a high-risk product to GPT-4o-mini still receives, on average, an encouraging response.</p>
+<p>Claude Sonnet 4.6 is genuinely risk-sensitive: even its bullish-framed high-risk score is −0.389, indicating the model pushes back on risky products regardless of how confident the user sounds. GPT-4o-mini's high-risk bearish score is +0.111, meaning that even a user who explicitly expresses reservations about a high-risk product still receives, on average, an encouraging response. This constitutes a materially different safety profile for high-stakes financial deployments.</p>
 
-<h3>Qualitative illustration: scenario S002</h3>
+<h2><span class="num">05</span>Qualitative Analysis</h2>
 
-<p>Scenario S002 involves rolling a $15,000 401(k) balance from a previous employer into a Vanguard 2055 target-date fund — a financially sound, widely recommended action. The same model evaluated the same scenario in two framings and received responses that the blinded judge scored 1.33 points apart:</p>
+<h3>Example: Scenario S002 (401k rollover into target-date fund)</h3>
+
+<p>This scenario involves rolling a $15,000 401(k) balance from a previous employer into a Vanguard 2055 target-date fund. It is an objectively sound, widely recommended financial action. The same model evaluated the identical scenario in two framing conditions and received responses that the blinded judge scored 1.33 points apart.</p>
 
 <div class="response-pair">
   <div class="response-block bullish">
@@ -302,50 +370,62 @@ main>*:nth-child(n+5){animation-delay:.3s;}
   </div>
 </div>
 
-<p>Both responses ultimately endorse the rollover. Neither says anything factually incorrect. But the bullish user receives an action plan; the bearish user receives an interrogation. The practical consequence is that a bullish user with a <em>bad</em> investment idea would receive the same structured action-guide format, while a bearish user with the same bad idea would receive pushback and questioning. The user who most needs scrutiny is structurally least likely to receive it from the model.</p>
+<p>Both responses ultimately endorse the rollover. Neither says anything factually incorrect. But the bullish user receives an action plan; the bearish user receives an interrogation. The practical consequence is that a bullish user with a <em>bad</em> investment idea would receive the same structured action-guide format, while a bearish user with the same idea would receive pushback. The user who most needs scrutiny is least likely to receive it.</p>
 
 <h3>Two novel failure modes</h3>
 
-<p><strong>Type 1 — Asymmetric bullish deference</strong> describes the pattern exhibited by GPT-4o-mini. The bullish-to-neutral mean score gap is +0.394, while the bearish-to-neutral gap is only −0.070. The model is effectively indifferent to expressed skepticism while strongly amplifying expressed enthusiasm. This is related to, but distinct from, the symmetric sycophancy definition in prior literature: it is one-directional, and operates on the upside only.</p>
-
-<p><strong>Type 2 — Framing-responsive posture shift</strong> describes the pattern exhibited by Claude Sonnet 4.6. The model does not alter its substantive recommendation based on framing — its underlying content is broadly consistent — but it alters the structural delivery of that advice. Bullish users receive action-oriented, forward-looking responses; bearish users receive Socratic interrogations. A user's expressed confidence in an idea is inversely correlated with the scrutiny they receive. This failure mode is not captured by any prior sycophancy benchmark or metric.</p>
+<div class="failure-grid">
+  <div class="failure-card">
+    <div class="fc-type">Type 1</div>
+    <div class="fc-name">Asymmetric Bullish Deference</div>
+    <div class="fc-model">Observed in: GPT-4o-mini</div>
+    <p>The model amplifies expressed enthusiasm (+0.394 gap, bullish vs. neutral) without meaningfully engaging with expressed skepticism (+0.070 gap, bearish vs. neutral). One-directional: operates on the upside only. Closest to the Sharma et al. <a href="#ref-1">[1]</a> definition but not symmetric.</p>
+  </div>
+  <div class="failure-card type2">
+    <div class="fc-type">Type 2</div>
+    <div class="fc-name">Framing-Responsive Posture Shift</div>
+    <div class="fc-model">Observed in: Claude Sonnet 4.6</div>
+    <p>The model delivers structurally different responses based on framing even when substantive content is similar. Bullish users receive action guides; bearish users receive Socratic interrogations. A user's expressed confidence is inversely correlated with the scrutiny they receive. Not captured by any prior benchmark.</p>
+  </div>
+</div>
 
 <h2><span class="num">06</span>Limitations</h2>
 
 <ol>
-  <li>The LLM judge introduces correlated evaluation errors. A Claude Opus 4.7 judge may have systematic scoring tendencies — for example, a consistent preference for balanced responses — that are not visible in the inter-sample variance. A planned human-verification subsample, targeting Cohen's κ ≥ 0.7 against the judge scores, will provide an independent check on judge reliability.</li>
-  <li>The pilot sample of 20 scenarios per model is too small for definitive hypothesis testing. The pilot is designed to validate the evaluation pipeline and surface failure modes; the full 150-scenario study is required before any conclusions about H1–H4 can be drawn with statistical confidence.</li>
-  <li>The constructed framings are explicit: the user's prior is stated directly in the opening sentence. Naturalistic user behaviour is more likely to embed priors implicitly, through word choice, framing, and emphasis. Future work could use forum posts or real advisory transcripts as framing sources to test whether the failure modes persist under more naturalistic conditions.</li>
-  <li>Frontier models are updated frequently, and these results represent a snapshot of specific model versions at specific evaluation dates, which are logged in the repository. Results may not generalise to future model versions.</li>
-  <li>This study measures consistency of advice across framings, not correctness of financial advice. No ground truth for "correct" financial advice exists for many of the scenarios, particularly those involving forward-looking market assessments.</li>
+  <li>The LLM judge (Claude Opus 4.7) introduces correlated evaluation errors across all scored responses. Mitigation: a planned human-verification subsample targeting Cohen's kappa of 0.7 or above against judge scores.</li>
+  <li>The pilot n=20 per model is insufficient for hypothesis testing at adequate statistical power. The pilot is a pipeline validation and failure-mode discovery exercise; the full 150-scenario study is required before conclusions about H1 through H4 can be drawn.</li>
+  <li>Framings are explicit: the user's prior is stated directly in the opening sentence. Naturalistic user behaviour embeds priors implicitly through word choice and framing. Future work should use forum posts or real advisory transcripts as framing sources.</li>
+  <li>Results are version-specific. All model version identifiers and evaluation dates are logged in the repository.</li>
+  <li>The study measures consistency across framings, not correctness of financial advice. No ground truth for correct financial advice exists for many forward-looking scenarios.</li>
 </ol>
 
 <h2><span class="num">07</span>Conclusion</h2>
 
-<p>The pilot establishes that sycophancy in LLM financial advice is not a binary, easily-measured property but a family of related failure modes that manifest differently across model families and risk levels. The strict symmetric sycophancy rate was 0% in the pilot, but this null result at the aggregate level conceals two qualitatively important patterns: an asymmetric bullish amplification in GPT-4o-mini that does not respond to expressed skepticism, and a framing-responsive delivery shift in Claude Sonnet 4.6 that systematically disadvantages users who most need scrutiny.</p>
+<p>The pilot establishes that sycophancy in LLM financial advice is not a single, cleanly measurable phenomenon but a family of related failure modes that manifest differently across model families. The strict symmetric sycophancy rate was 0%, but this null result conceals two operationally important patterns: an asymmetric bullish amplification in GPT-4o-mini that does not respond to expressed skepticism, and a delivery-structure shift in Claude Sonnet 4.6 that systematically disadvantages users who most need scrutiny.</p>
 
-<p>The most practically significant finding is the risk-tier divergence. Claude Sonnet 4.6 applies genuine risk sensitivity — it pushes back on high-risk scenarios even when users express enthusiasm. GPT-4o-mini does not. This difference would be invisible to any evaluation that reports only aggregate sycophancy rates without stratifying by asset risk level. It implies that the two models have materially different safety profiles for high-stakes financial deployments, and that procurement decisions based on aggregate benchmarks would systematically underweight this difference.</p>
+<p>The risk-tier divergence is the most practically significant finding. Claude Sonnet 4.6 applies genuine risk sensitivity even under bullish framing; GPT-4o-mini does not. This difference is invisible to aggregate sycophancy metrics and would be missed by any evaluation that does not stratify by asset risk level. It implies meaningfully different safety profiles for high-stakes financial deployment decisions.</p>
 
-<p>The full 150-scenario evaluation, extending the model set to include Claude Opus 4.7 and GPT-4o with and without extended thinking, is in progress. The complete benchmark dataset, evaluation harness, judge rubric, and all raw scores are released as open source to enable replication, extension, and comparison with future models.</p>
+<p>The complete benchmark dataset, evaluation harness, judge rubric, and all raw scores are released as open source to enable replication and extension.</p>
 
 <div class="resources">
   <h3>Resources</h3>
   <ul>
     <li><span class="resource-name">Code, dataset &amp; eval harness</span><a href="https://github.com/Prakharanand000/sycophancy-finance" target="_blank" class="resource-action">GitHub</a></li>
     <li><span class="resource-name">Pilot write-up &amp; qualitative analysis</span><a href="https://medium.com/@prakharanand/i-ran-a-sycophancy-eval-on-llm-financial-advice-c4236daed3f8" target="_blank" class="resource-action">Medium</a></li>
-    <li><span class="resource-name">Research proposal &amp; pre-registration</span><a href="https://github.com/Prakharanand000/sycophancy-finance/blob/main/RESEARCH_PROPOSAL.md" target="_blank" class="resource-action">Markdown</a></li>
+    <li><span class="resource-name">Research proposal</span><a href="https://github.com/Prakharanand000/sycophancy-finance/blob/main/RESEARCH_PROPOSAL.md" target="_blank" class="resource-action">Markdown</a></li>
   </ul>
 </div>
 
 <div class="refs">
 <h2>References</h2>
 <ol>
-  <li id="ref-1">Sharma, M., Tong, M., Korbak, T., et al. (2023). <a href="https://arxiv.org/abs/2310.13548" target="_blank">Towards Understanding Sycophancy in Language Models</a>. Anthropic.</li>
-  <li id="ref-2">Perez, E., Ringer, S., Lukošiūtė, K., et al. (2022). <a href="https://arxiv.org/abs/2212.09251" target="_blank">Discovering Language Model Behaviors with Model-Written Evaluations</a>. arXiv:2212.09251.</li>
-  <li id="ref-3">Fanous, A., et al. (2025). <a href="https://arxiv.org/abs/2502.08177" target="_blank">SycEval: Evaluating LLM Sycophancy</a>. arXiv:2502.08177.</li>
-  <li id="ref-4">Malmqvist, L. (2024). <a href="https://arxiv.org/abs/2411.15287" target="_blank">Sycophancy in Large Language Models: Causes and Mitigations</a>. arXiv:2411.15287.</li>
-  <li id="ref-5">Bai, Y., Jones, A., Ndousse, K., et al. (2022). <a href="https://arxiv.org/abs/2204.05862" target="_blank">Training a Helpful and Harmless Assistant with Reinforcement Learning from Human Feedback</a>. Anthropic.</li>
+  <li id="ref-1">Sharma, M., Tong, M., Korbak, T., et al. (2023). <a href="https://arxiv.org/abs/2310.13548" target="_blank">Towards Understanding Sycophancy in Language Models.</a> Anthropic Technical Report.</li>
+  <li id="ref-2">Perez, E., Ringer, S., Lukošiūtė, K., et al. (2022). <a href="https://arxiv.org/abs/2212.09251" target="_blank">Discovering Language Model Behaviors with Model-Written Evaluations.</a> arXiv:2212.09251.</li>
+  <li id="ref-3">Fanous, A., et al. (2025). <a href="https://arxiv.org/abs/2502.08177" target="_blank">SycEval: Evaluating LLM Sycophancy.</a> arXiv:2502.08177.</li>
+  <li id="ref-4">Malmqvist, L. (2024). <a href="https://arxiv.org/abs/2411.15287" target="_blank">Sycophancy in Large Language Models: Causes and Mitigations.</a> arXiv:2411.15287.</li>
+  <li id="ref-5">Bai, Y., Jones, A., Ndousse, K., et al. (2022). <a href="https://arxiv.org/abs/2204.05862" target="_blank">Training a Helpful and Harmless Assistant with Reinforcement Learning from Human Feedback.</a> Anthropic.</li>
   <li id="ref-6">Kahneman, D. (2011). <em>Thinking, Fast and Slow.</em> Farrar, Straus and Giroux.</li>
+  <li id="ref-7">Wei, J., Wang, X., Schuurmans, D., et al. (2022). <a href="https://arxiv.org/abs/2201.11903" target="_blank">Chain-of-Thought Prompting Elicits Reasoning in Large Language Models.</a> NeurIPS 2022.</li>
 </ol>
 </div>
 

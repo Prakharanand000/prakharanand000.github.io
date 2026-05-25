@@ -9,11 +9,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..900,0..100&family=Source+Serif+4:opsz,wght@8..60,300..900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg:#fbf8f1; --bg-tint:#f3ede0; --bg-code:#ece6d6;
-  --ink:#1c1917; --ink-soft:#44403c; --ink-mute:#78716c;
-  --rule:#d6cfbe; --rule-soft:#e5ddc9;
-  --accent:#0f5132; --accent-warm:#7c2d12; --green:#166534;
+:root{
+  --bg:#fbf8f1;--bg-tint:#f3ede0;--bg-code:#ece6d6;
+  --ink:#1c1917;--ink-soft:#44403c;--ink-mute:#78716c;
+  --rule:#d6cfbe;--rule-soft:#e5ddc9;
+  --accent:#0f5132;--red:#7c2d12;--green:#166534;
   --serif:"Source Serif 4","Iowan Old Style",Georgia,serif;
   --display:"Fraunces","Source Serif 4",Georgia,serif;
   --mono:"JetBrains Mono","SF Mono",Menlo,monospace;
@@ -42,11 +42,11 @@ h3{font-family:var(--display);font-weight:500;font-size:1.18rem;margin:2.5rem 0 
 p{margin:0 0 1.2rem;}
 p.lede{font-size:1.15rem;color:var(--ink-soft);}
 p.lede::first-letter{font-family:var(--display);font-size:3.4rem;font-weight:400;font-variation-settings:"opsz" 144,"SOFT" 50;float:left;line-height:.85;margin:.4rem .5rem -.2rem 0;color:var(--accent);}
-a{color:var(--accent);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px;text-decoration-color:rgba(15,81,50,.4);transition:text-decoration-color .15s;}
+a{color:var(--accent);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px;text-decoration-color:rgba(15,81,50,.35);transition:text-decoration-color .15s;}
 a:hover{text-decoration-color:var(--accent);}
-strong{font-weight:600;} em{font-style:italic;}
-.callout{background:var(--bg-tint);border-left:3px solid var(--accent-warm);padding:1.2rem 1.4rem;margin:2rem 0;font-style:italic;color:var(--ink-soft);font-size:1rem;line-height:1.5;}
-.callout strong{font-style:normal;font-variant:small-caps;letter-spacing:.08em;font-size:.78rem;display:block;margin-bottom:.4rem;color:var(--accent-warm);}
+strong{font-weight:600;}em{font-style:italic;}
+.callout{background:var(--bg-tint);border-left:3px solid var(--red);padding:1.2rem 1.4rem;margin:2rem 0;font-style:italic;color:var(--ink-soft);font-size:1rem;line-height:1.5;}
+.callout strong{font-style:normal;font-variant:small-caps;letter-spacing:.08em;font-size:.78rem;display:block;margin-bottom:.4rem;color:var(--red);}
 .callout.live{border-left-color:var(--green);}
 .callout.live strong{color:var(--green);}
 code,.mono{font-family:var(--mono);font-size:.86em;}
@@ -65,41 +65,66 @@ th{font-family:var(--mono);font-weight:500;font-size:.74rem;text-transform:upper
 td.num{font-family:var(--mono);font-variant-numeric:tabular-nums;}
 tr:last-child td{border-bottom:none;}
 td.good{color:var(--green);font-family:var(--mono);font-size:.88em;font-weight:600;}
-td.bad{color:var(--accent-warm);font-family:var(--mono);font-size:.88em;font-weight:600;}
+td.bad{color:var(--red);font-family:var(--mono);font-size:.88em;font-weight:600;}
 td.muted{color:var(--ink-mute);font-family:var(--mono);font-size:.88em;}
 figure{margin:2.5rem 0;}
 figcaption{font-family:var(--mono);font-size:.72rem;color:var(--ink-mute);text-transform:uppercase;letter-spacing:.08em;margin-top:.8rem;padding-top:.5rem;border-top:1px solid var(--rule-soft);}
-figcaption .label{color:var(--accent-warm);margin-right:.5rem;}
-.category-grid{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin:1.5rem 0;}
-@media(min-width:640px){.category-grid{grid-template-columns:repeat(3,1fr);}}
-.cat-card{background:var(--bg-tint);border-top:2px solid var(--rule);padding:1rem 1rem 1.2rem;}
-.cat-card .cat-tag{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:.5rem;}
-.cat-card .cat-name{font-family:var(--serif);font-size:.96rem;font-weight:600;color:var(--ink);margin-bottom:.3rem;}
-.cat-card .cat-desc{font-family:var(--serif);font-size:.84rem;color:var(--ink-soft);line-height:1.4;margin:0;}
-.example-block{background:var(--bg-tint);padding:1.2rem 1.4rem;margin:1rem 0;border-radius:2px;border-left:3px solid var(--accent-warm);}
-.example-block .ex-label{font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-warm);margin-bottom:.5rem;}
-.example-block .ex-text{font-style:italic;color:var(--ink-soft);font-size:.94rem;line-height:1.5;margin:0;}
+figcaption .label{color:var(--red);margin-right:.5rem;}
+
+/* Pipeline */
+.pipeline{display:flex;align-items:stretch;flex-wrap:nowrap;gap:0;margin:1.8rem 0;overflow-x:auto;}
+.pipe-step{flex:1;min-width:5.5rem;padding:.7rem .5rem;background:var(--bg-tint);border:1px solid var(--rule);font-family:var(--mono);font-size:.68rem;text-align:center;line-height:1.45;color:var(--ink-soft);}
+.pipe-step strong{display:block;color:var(--ink);font-size:.72rem;margin-bottom:.15rem;}
+.pipe-step.accent-g{border-color:var(--accent);color:var(--accent);}
+.pipe-step.accent-r{border-color:var(--red);color:var(--red);}
+.pipe-arr{display:flex;align-items:center;padding:0 .2rem;color:var(--ink-mute);font-size:1rem;flex-shrink:0;}
+
+/* Hallucination taxonomy */
+.tax-root{background:var(--bg-tint);border:1.5px solid var(--ink);padding:.8rem 1rem;font-family:var(--mono);font-size:.75rem;text-align:center;margin-bottom:.8rem;}
+.tax-branches{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-top:.4rem;}
+@media(max-width:480px){.tax-branches{grid-template-columns:1fr;}}
+.tax-node{border:1.5px solid var(--rule);padding:.9rem 1rem;}
+.tax-node .tn-type{font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.3rem;}
+.tax-node .tn-name{font-size:.9rem;font-weight:600;font-family:var(--serif);margin-bottom:.3rem;}
+.tax-node .tn-model{font-family:var(--mono);font-size:.68rem;color:var(--ink-mute);margin-bottom:.4rem;}
+.tax-node p{font-size:.82rem;color:var(--ink-soft);margin:0;line-height:1.45;}
+.tax-node.type1{border-color:var(--red);}
+.tax-node.type1 .tn-type{color:var(--red);}
+.tax-node.type2{border-color:var(--accent);}
+.tax-node.type2 .tn-type{color:var(--accent);}
+.tax-connector{text-align:center;font-family:var(--mono);font-size:.75rem;color:var(--ink-mute);margin:.2rem 0;}
+
+/* Example block */
+.example-block{background:var(--bg-tint);padding:1.2rem 1.4rem;margin:1rem 0;border-radius:2px;}
+.example-block .ex-label{font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;}
+.example-block.hallucinated .ex-label{color:var(--red);}
+.example-block.correct .ex-label{color:var(--green);}
+.example-block .ex-verdict{background:var(--bg-code);border-radius:2px;padding:.04em .4em;font-size:.82em;}
+.example-block .ex-text{font-style:italic;color:var(--ink-soft);font-size:.94rem;line-height:1.55;margin:0;}
+
+/* Bar chart */
 .bar-chart{margin:1.5rem 0;display:flex;flex-direction:column;gap:.55rem;font-family:var(--mono);font-size:.78rem;}
 .bc-row{display:flex;align-items:center;gap:.7rem;}
-.bc-label{width:9rem;flex-shrink:0;color:var(--ink-mute);text-align:right;font-size:.75rem;}
+.bc-label{width:9rem;flex-shrink:0;color:var(--ink-mute);text-align:right;font-size:.74rem;}
 .bc-track{flex:1;height:14px;background:var(--bg-code);border-radius:2px;}
 .bc-fill{height:100%;border-radius:2px;display:flex;align-items:center;padding-left:5px;font-size:.68rem;font-weight:600;color:#fff;min-width:4px;}
 .bc-fill.safe{background:var(--green);}
-.bc-fill.warn{background:var(--accent-warm);}
+.bc-fill.warn{background:var(--red);}
 .bc-val{width:3rem;color:var(--ink-soft);}
-.bc-group-label{font-family:var(--mono);font-size:.7rem;color:var(--ink-mute);margin:.8rem 0 .4rem;letter-spacing:.08em;text-transform:uppercase;}
+.bc-group-label{font-family:var(--mono);font-size:.7rem;color:var(--ink-mute);margin:.9rem 0 .35rem;letter-spacing:.08em;text-transform:uppercase;}
+
 .resources{background:var(--bg-tint);padding:1.6rem 1.8rem;margin:3rem 0;border-left:3px solid var(--ink);}
 .resources h3{margin-top:0;margin-bottom:1rem;font-family:var(--mono);font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-mute);font-weight:500;}
 .resources ul{list-style:none;padding:0;margin:0;}
 .resources li{padding:.5rem 0;border-bottom:1px solid var(--rule-soft);display:flex;justify-content:space-between;align-items:baseline;gap:1rem;}
 .resources li:last-child{border-bottom:none;}
 .resources .resource-name{font-size:1rem;}
-.resources .resource-action{font-family:var(--mono);font-size:.78rem;letter-spacing:.04em;color:var(--accent-warm);white-space:nowrap;}
+.resources .resource-action{font-family:var(--mono);font-size:.78rem;letter-spacing:.04em;color:var(--red);white-space:nowrap;}
 .resources .resource-action::after{content:" →";}
 .refs{margin-top:5rem;padding-top:2rem;border-top:1px solid var(--rule);font-size:.88rem;color:var(--ink-soft);}
 .refs h2{font-size:1rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:.12em;font-weight:500;padding-left:0;margin-bottom:1.2rem;}
 .refs ol{font-size:.86rem;}
-.refs li{margin-bottom:.7rem;}
+.refs li{margin-bottom:.8rem;}
 .foot{margin-top:6rem;padding-top:2rem;border-top:1px solid var(--rule);font-family:var(--mono);font-size:.74rem;color:var(--ink-mute);letter-spacing:.04em;display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
 main>*{animation:rise .7s cubic-bezier(.2,.7,.2,1) backwards;}
 main>*:nth-child(1){animation-delay:.05s;}main>*:nth-child(2){animation-delay:.12s;}main>*:nth-child(3){animation-delay:.18s;}main>*:nth-child(4){animation-delay:.24s;}main>*:nth-child(n+5){animation-delay:.3s;}
@@ -110,18 +135,19 @@ main>*:nth-child(1){animation-delay:.05s;}main>*:nth-child(2){animation-delay:.1
 <div class="page">
 
 <div class="eyebrow">
-  <span class="dot"></span><span class="live">Pilot results live</span>
-  <span class="sep">·</span><span>v0.1 · 2026</span>
-  <span class="sep">·</span><span>Pre-registered</span>
-  <span class="sep">·</span><a href="https://prakharanand000.github.io" style="color:var(--accent);text-decoration:none;">← Portfolio</a>
+  <span class="dot"></span>
+  <span class="live">Pilot results live</span>
+  <span class="sep">·</span>
+  <span>2026</span>
+  <span class="sep">·</span>
+  <a href="https://prakharanand000.github.io" style="color:var(--accent);text-decoration:none;">← Portfolio</a>
 </div>
 
 <h1 class="title">Adverse Media Hallucination in LLM-Based AML Screening<em>.</em></h1>
-<p class="subtitle">A pre-registered evaluation of hallucination rates when frontier language models are used for anti-money laundering adverse media screening.</p>
+<p class="subtitle">A systematic evaluation of hallucination failure modes when frontier language models are used for anti-money laundering adverse media screening.</p>
 
 <div class="byline">
   <div class="byline-row"><span>Author</span><a href="https://prakharanand000.github.io/">Prakhar Anand</a></div>
-  <div class="byline-row"><span>Affiliation</span><span>Independent · UC Davis MSBA · former PwC Financial Crimes Unit</span></div>
   <div class="byline-row"><span>Code &amp; Data</span><a href="https://github.com/Prakharanand000/adverse-media-hallucination" target="_blank">github.com/Prakharanand000/adverse-media-hallucination</a></div>
   <div class="byline-row"><span>Write-up</span><a href="https://medium.com/@prakharanand/adverse-media-hallucination-in-llm-based-aml-screening-a6a361e48c94" target="_blank">Medium</a></div>
   <div class="byline-row"><span>Contact</span><a href="mailto:prakharanand000@gmail.com">prakharanand000@gmail.com</a></div>
@@ -131,95 +157,116 @@ main>*:nth-child(1){animation-delay:.05s;}main>*:nth-child(2){animation-delay:.1
 
 <h2><span class="num">00</span>Abstract</h2>
 
-<p class="lede">Anti-money laundering compliance increasingly relies on adverse media screening — the process of identifying negative news associated with entities to flag potential financial crime risk. Large language models are being evaluated and deployed for this task due to their ability to synthesise information across large document sets, but their hallucination behaviour in this context is poorly understood. A hallucination in adverse media screening does not merely produce an incorrect answer: it produces a fabricated risk flag that can cause an innocent party to be denied banking services, flagged to regulators, or subjected to enhanced due diligence based on events that never occurred.</p>
+<p class="lede">Anti-money laundering compliance depends critically on adverse media screening: the process of identifying negative news associated with entities to flag financial crime risk. Large language models offer the ability to synthesise information across large document sets and surface risk-relevant content at scale, making them attractive for this compliance use case. The hallucination behaviour of these models in this context is, however, poorly understood and carries specific operational risks. A hallucination in adverse media screening does not merely produce an incorrect answer; it produces a fabricated risk flag that can result in an innocent party being denied banking services, subjected to enhanced due diligence, or reported to regulators based on events that never occurred.</p>
 
-<p>This paper presents a pre-registered evaluation of hallucination rates across three frontier models — Claude Sonnet 4.6, Claude Opus 4.7, and GPT-4o-mini — using a benchmark of 100 synthetic entities spanning five ground-truth categories. The evaluation finds a 0% false positive rate on clean entities across all models, but identifies two distinct hallucination failure modes not previously described in the AML or hallucination literature: <em>PEP inference hallucination</em>, in which a model fabricates politically exposed person status for entities with political adjacency but no direct PEP classification; and <em>template-regurgitation hallucination</em>, in which a model generates structurally plausible adverse media summaries without grounding in the source material. Claude Opus 4.7 exhibited 0% hallucination across all five categories. The benchmark dataset, entity descriptions, and evaluation rubric are released as open source.</p>
+<p>This paper presents an evaluation of hallucination rates across three frontier models using a benchmark of 100 synthetic entities spanning five ground-truth categories. All three models achieved a 0% false positive rate on clearly clean entities. However, two distinct hallucination failure modes were identified in structurally ambiguous categories: <em>PEP inference hallucination</em>, observed at a 50% rate in Claude Sonnet 4.6 on politically adjacent entities; and <em>template-regurgitation hallucination</em>, observed at a 67% rate in GPT-4o-mini on ambiguous entities. Claude Opus 4.7 exhibited 0% hallucination across all five categories. The benchmark, entity descriptions, and evaluation rubric are released as open source.</p>
 
 <div class="callout live">
-  <strong>Pilot results — 2026</strong>
-  100-entity evaluation complete across three models. Key finding: 0% false positive on clean entities, but model-specific hallucination failure modes identified in PEP-adjacent and ambiguous categories. Full details in §05.
+  <strong>Evaluation complete — 2026</strong>
+  100-entity benchmark evaluated across three models. 0% false positive on clean entities across the board. Two novel category-specific failure modes identified. Details in sections 04 and 05.
 </div>
 
 <h2><span class="num">01</span>Introduction</h2>
 
-<p>Adverse media screening is a core component of AML due diligence and Know Your Customer (KYC) processes at financial institutions. Compliance teams are required to search for negative news — fraud convictions, sanctions designations, financial crime associations, and reputational concerns — before onboarding clients, and to monitor for new developments on an ongoing basis. The volume of adverse media to be screened, and the complexity of disambiguating common names and corporate structures, makes this a natural candidate for automation using large language models.</p>
+<p>Adverse media screening is a regulated obligation for financial institutions under the Financial Action Task Force (FATF) Recommendations <a href="#ref-1">[1]</a> and national AML frameworks. Compliance teams are required to search for negative news associated with prospective and existing clients, including fraud convictions, sanctions designations, PEP status, and financial crime associations, both at onboarding and on an ongoing basis. The volume and geographic breadth of adverse media to be screened makes this an expensive, time-consuming manual process. Large language models represent a potential solution: a model that can read news articles, assess their relevance to a specific entity, identify adverse categories, and produce a structured risk report could dramatically reduce the cost of compliance workflows.</p>
 
-<p>The practical case for LLMs in adverse media screening is intuitive: a model that can read and synthesise news articles, disambiguate entity references, assess risk relevance, and flag items for human review could dramatically reduce the cost and time of compliance workflows. Several financial institutions have begun piloting or deploying such systems. The regulatory and operational risk of doing so, however, depends critically on what kinds of errors these models make — and in particular on the rate and nature of hallucinated adverse associations.</p>
+<p>Several vendors have begun offering LLM-based adverse media screening products, and financial institutions are piloting them. The regulatory risk of doing so depends entirely on what kinds of errors these models make. Regulators evaluating an institution's AML programme will ask whether its screening tools are reliable; an institution that cannot demonstrate the error rate and failure modes of its LLM screening tool is operationally exposed regardless of the headline accuracy figure. This study is motivated by that practical gap: what are the specific failure modes of frontier LLMs in adverse media screening, and where are they concentrated?</p>
 
-<p>The failure mode of concern is not simply a missed adverse flag (a false negative), which is the focus of most recall-oriented evaluations. The more consequential failure mode in many compliance contexts is a fabricated adverse flag (a hallucinated positive): a model that asserts a fraud conviction, sanctions link, or PEP relationship that does not exist in the source material. Such an error, if not caught in human review, could result in de-banking an innocent customer, generating a suspicious activity report with fabricated predicate information, or breaching data protection obligations by associating a real person with false criminal information.</p>
+<p>Prior hallucination research has focused on factual accuracy in open-domain question answering <a href="#ref-2">[2]</a>, summarisation faithfulness <a href="#ref-4">[4]</a>, and retrieval-augmented generation <a href="#ref-3">[3]</a>. AML adverse media screening has not been studied as a hallucination domain. The present study fills this gap by designing a benchmark specifically around the entity types and structural ambiguities that are most likely to elicit hallucination in a screening context.</p>
 
-<p>This study asks two questions. First, what is the baseline rate of false positive hallucination on clearly clean entities? Second, beyond clean-entity false positives, what specific hallucination failure modes emerge when models process entities in more ambiguous categories — PEP-adjacent, common-name, or mixed-signal?</p>
+<h2><span class="num">02</span>AML Adverse Media Screening: Background</h2>
 
-<h2><span class="num">02</span>Research Questions &amp; Pre-registered Hypotheses</h2>
+<h3>What the task involves</h3>
 
-<p>The primary research question is whether frontier LLMs hallucinate adverse media associations — sanctions links, fraud convictions, PEP status, or financial crime risk — for entities for which no such associations exist in the provided source material. A secondary question is whether any hallucination that occurs is uniformly distributed across entity categories, or concentrated in specific types of entities that share structural features likely to elicit confabulation.</p>
+<p>An adverse media screening workflow begins with an entity — an individual, corporate entity, or vessel — and a set of source documents: news articles, database records, court filings, or regulatory announcements. The screener must determine whether any of the source material contains adverse associations relevant to financial crime risk. The output is a structured risk assessment specifying whether adverse media was found, what category it falls into (sanctions, fraud, PEP, reputational, etc.), and what confidence can be assigned to the finding.</p>
 
-<p>Three hypotheses were registered prior to model evaluation:</p>
-
-<div class="table-wrap">
-<table>
-<thead><tr><th>ID</th><th>Hypothesis</th><th>Statistical test</th></tr></thead>
-<tbody>
-<tr><td class="mono">H1</td><td>Hallucination rate on clean entities exceeds 0% for at least one model.</td><td>Exact binomial test against p=0 null.</td></tr>
-<tr><td class="mono">H2</td><td>Hallucination rate is higher in ambiguous entity categories than in clean ones.</td><td>Two-proportion z-test, clean vs. ambiguous.</td></tr>
-<tr><td class="mono">H3</td><td>Extended thinking reduces hallucination rates by more than 25 percentage points.</td><td>Paired McNemar test, extended vs. standard.</td></tr>
-</tbody>
-</table>
+<figure>
+<div class="pipeline">
+  <div class="pipe-step"><strong>Entity input</strong>Name, jurisdiction,identifiers</div>
+  <div class="pipe-arr">→</div>
+  <div class="pipe-step"><strong>Source articles</strong>News, databases,filings</div>
+  <div class="pipe-arr">→</div>
+  <div class="pipe-step accent-g"><strong>LLM screening</strong>Entity matching,risk extraction</div>
+  <div class="pipe-arr">→</div>
+  <div class="pipe-step"><strong>Risk assessment</strong>Category, confidence,evidence</div>
+  <div class="pipe-arr">→</div>
+  <div class="pipe-step"><strong>Human review</strong>Escalation orclose</div>
 </div>
+<figcaption><span class="label">Figure 1.</span> Typical LLM-based adverse media screening architecture. The LLM performs entity matching and risk extraction from source articles, producing a structured output reviewed by a compliance analyst.</figcaption>
+</figure>
+
+<h3>Where hallucination causes harm</h3>
+
+<p>The critical difference between adverse media screening and general question-answering is the consequence structure of errors. In general QA, a false positive (incorrectly affirming something) may mislead a user but has limited downstream harm. In AML screening, a false positive fabricated by the model may be used to justify refusing a customer, filing a suspicious activity report, or restricting correspondent banking relationships. The harm falls on the incorrectly flagged party, who has no visibility into the model's reasoning and limited recourse against an institution acting on its output.</p>
+
+<p>Two failure modes are of particular operational concern:</p>
+<ul>
+  <li><strong>PEP inference hallucination:</strong> The model asserts that an entity is a politically exposed person based on contextual proximity to political figures, without the entity itself holding or having held a prominent public function as defined under FATF Recommendation 12 <a href="#ref-1">[1]</a>.</li>
+  <li><strong>Template-regurgitation hallucination:</strong> The model generates a structurally plausible adverse media report — with all the expected formatting, confidence language, and adverse category labels — without grounding in the source documents provided for the entity.</li>
+</ul>
 
 <h2><span class="num">03</span>Benchmark Design</h2>
 
 <h3>Entity categories</h3>
-<p>A benchmark of 100 synthetic entities was constructed across five ground-truth categories, designed to probe distinct hallucination failure modes without using real individuals or organisations. The use of synthetic entities avoids the ethical and legal complications of attributing fabricated adverse associations to real parties, while preserving the structural properties of each category that are likely to elicit hallucination.</p>
 
-<div class="category-grid">
-  <div class="cat-card">
-    <div class="cat-tag">Category A</div>
-    <div class="cat-name">Clean entities</div>
-    <p class="cat-desc">No adverse media of any kind. Designed to measure false positive rate at baseline.</p>
-  </div>
-  <div class="cat-card">
-    <div class="cat-tag">Category B</div>
-    <div class="cat-name">Confirmed adverse</div>
-    <p class="cat-desc">True adverse media present in source material. Designed to measure recall.</p>
-  </div>
-  <div class="cat-card">
-    <div class="cat-tag">Category C</div>
-    <div class="cat-name">PEP-adjacent</div>
-    <p class="cat-desc">Political connections exist, but entity is not itself a PEP. Probes PEP inference hallucination.</p>
-  </div>
-  <div class="cat-card">
-    <div class="cat-tag">Category D</div>
-    <div class="cat-name">Common names</div>
-    <p class="cat-desc">High name-collision risk. Probes cross-entity contamination.</p>
-  </div>
-  <div class="cat-card">
-    <div class="cat-tag">Category E</div>
-    <div class="cat-name">Ambiguous / mixed signal</div>
-    <p class="cat-desc">Incomplete or conflicting adverse media signals. Probes template-regurgitation hallucination.</p>
-  </div>
+<p>100 synthetic entities were constructed across five ground-truth categories. The use of synthetic entities avoids attributing fabricated adverse associations to real parties while preserving the structural properties of each category.</p>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Category</th><th>N</th><th>Description</th><th>Primary failure mode probed</th></tr></thead>
+<tbody>
+<tr><td><strong>A — Clean</strong></td><td class="num">20</td><td>No adverse media of any kind in source material</td><td>False positive baseline</td></tr>
+<tr><td><strong>B — Confirmed adverse</strong></td><td class="num">20</td><td>True adverse media present in source articles</td><td>Recall and precision</td></tr>
+<tr><td><strong>C — PEP-adjacent</strong></td><td class="num">20</td><td>Political connections present; entity not itself a PEP</td><td>PEP inference hallucination</td></tr>
+<tr><td><strong>D — Common names</strong></td><td class="num">20</td><td>High name-collision risk with adverse-flagged entities</td><td>Cross-entity contamination</td></tr>
+<tr><td><strong>E — Ambiguous</strong></td><td class="num">20</td><td>Incomplete or conflicting adverse signals in source material</td><td>Template-regurgitation hallucination</td></tr>
+</tbody>
+</table>
 </div>
 
 <h3>Evaluation protocol</h3>
-<p>Each model was presented with a structured entity description and a set of synthetic news articles for that entity — some adverse, some neutral — and asked to produce an adverse media screening assessment covering the presence or absence of: fraud or financial crime, sanctions designations, PEP status, reputational adverse media, and associated party risk. Outputs were evaluated against the ground-truth category labels by a blinded reviewer. Hallucination was defined as any positive assertion in the model's output for which no supporting evidence existed in the provided source material.</p>
 
-<h2><span class="num">04</span>Models Evaluated</h2>
+<p>Each model was presented with a structured entity description and a set of synthetic news articles for that entity. The model was asked to produce a structured adverse media screening assessment covering five risk categories: fraud or financial crime, sanctions designations, PEP status, reputational adverse media, and associated party risk. All outputs were evaluated against ground-truth labels by a blinded reviewer. Hallucination was defined as any positive assertion in the model output for which no supporting evidence existed in the provided source material.</p>
 
-<p>Three models were evaluated: Claude Sonnet 4.6 (Anthropic), Claude Opus 4.7 (Anthropic), and GPT-4o-mini (OpenAI). This selection spans two capability tiers within the Anthropic model family to test whether hallucination rates scale with model capability (H3 analogue), and includes a cross-provider comparison point. All models were evaluated on the same entity descriptions and source articles, with no model-specific prompt tuning applied.</p>
+<figure>
+<div class="pipeline">
+  <div class="pipe-step"><strong>Synthetic entity</strong>Name, role,jurisdiction</div>
+  <div class="pipe-arr">→</div>
+  <div class="pipe-step"><strong>Source articles</strong>2-5 per entity;ground-truth controlled</div>
+  <div class="pipe-arr">→</div>
+  <div class="pipe-step accent-g"><strong>Model prompt</strong>Structured screeningrequest</div>
+  <div class="pipe-arr">→</div>
+  <div class="pipe-step"><strong>Model output</strong>Structured riskassessment</div>
+  <div class="pipe-arr">→</div>
+  <div class="pipe-step accent-r"><strong>Hallucination review</strong>Claims vs.source material</div>
+</div>
+<figcaption><span class="label">Figure 2.</span> Evaluation pipeline. Ground-truth is controlled at the source article level. Hallucination is scored by comparing model output claims to evidence present in source articles only.</figcaption>
+</figure>
+
+<h2><span class="num">04</span>Related Work</h2>
+
+<p>Ji et al. (2023) provide the most comprehensive survey of hallucination in natural language generation, distinguishing between intrinsic hallucination (contradicting source material) and extrinsic hallucination (introducing information not present in the source) <a href="#ref-2">[2]</a>. Both types are relevant to adverse media screening: PEP inference hallucination is extrinsic (the PEP claim has no source basis), while template-regurgitation hallucination is a form of extrinsic hallucination that additionally mimics the structural format of a legitimate finding.</p>
+
+<p>Maynez et al. (2020) studied faithfulness in abstractive summarisation, finding that models frequently introduced named entities, dates, and relationships not present in source documents <a href="#ref-4">[4]</a>. This is directly relevant to the screening context, where models are effectively performing a constrained summarisation task over a set of source articles. The template-regurgitation failure mode identified in this study is a domain-specific manifestation of this general tendency.</p>
+
+<p>Huang et al. (2023) survey hallucination in large language models specifically, noting that retrieval-augmented generation (RAG) can reduce but does not eliminate hallucination, and that model scale is associated with lower hallucination rates in some but not all settings <a href="#ref-3">[3]</a>. The present study's finding that Claude Opus 4.7 (a larger model) shows 0% hallucination while Claude Sonnet 4.6 (a smaller model in the same family) shows 50% on PEP-adjacent entities is consistent with this literature, though the sample size is insufficient for a definitive capability-scaling conclusion.</p>
 
 <h2><span class="num">05</span>Results</h2>
 
-<h3>False positive rate on clean entities</h3>
+<h3>False positive rate on clean entities: 0% across all models</h3>
 
-<p>All three models correctly avoided asserting adverse associations for Category A (clean) entities, producing a 0% false positive rate across the board. This is a reassuring baseline result: under the most straightforward test — a clearly clean entity with no adverse source material — frontier models do not hallucinate adverse flags. The more consequential failure modes emerge in structurally ambiguous categories.</p>
+<p>All three models correctly avoided asserting adverse associations for Category A entities. No model hallucinated a fraud conviction, sanctions link, PEP status, or reputational adverse flag for any of the 20 clean entities. This is the baseline result: under the simplest test — a clearly clean entity with no adverse source material — frontier models do not hallucinate adverse flags.</p>
+
+<h3>Hallucination rates by model and category</h3>
 
 <figure>
 <div class="table-wrap">
 <table>
-<thead><tr><th>Model</th><th>Clean (A)</th><th>PEP-Adjacent (C)</th><th>Ambiguous (E)</th><th>Overall hallucination</th></tr></thead>
+<thead><tr><th>Model</th><th>Clean (A)</th><th>Confirmed (B)</th><th>PEP-adj (C)</th><th>Common name (D)</th><th>Ambiguous (E)</th></tr></thead>
 <tbody>
 <tr>
   <td><strong>Claude Opus 4.7</strong></td>
+  <td class="good">0%</td>
   <td class="good">0%</td>
   <td class="good">0%</td>
   <td class="good">0%</td>
@@ -228,106 +275,134 @@ main>*:nth-child(1){animation-delay:.05s;}main>*:nth-child(2){animation-delay:.1
 <tr>
   <td>Claude Sonnet 4.6</td>
   <td class="good">0%</td>
+  <td class="good">0%</td>
   <td class="bad">50%</td>
   <td class="muted">Low</td>
-  <td class="bad">Elevated (Cat. C)</td>
+  <td class="muted">Low</td>
 </tr>
 <tr>
   <td>GPT-4o-mini</td>
   <td class="good">0%</td>
+  <td class="good">0%</td>
+  <td class="muted">Low</td>
   <td class="muted">Low</td>
   <td class="bad">67%</td>
-  <td class="bad">Elevated (Cat. E)</td>
 </tr>
 </tbody>
 </table>
 </div>
-<figcaption><span class="label">Table 1.</span> Hallucination rates by model and entity category. Claude Opus 4.7 shows 0% hallucination across all categories. Smaller models exhibit category-specific failure modes.</figcaption>
+<figcaption><span class="label">Table 1.</span> Hallucination rates by model and entity category. Claude Opus 4.7 shows 0% hallucination across all categories. Each smaller model exhibits a distinct category-specific failure mode.</figcaption>
 </figure>
 
 <figure>
 <div class="bar-chart">
-  <div class="bc-group-label">Claude Opus 4.7 — hallucination rate by category</div>
+  <div class="bc-group-label">Claude Opus 4.7 — 0% hallucination across all categories</div>
   <div class="bc-row"><div class="bc-label">Clean (A)</div><div class="bc-track"><div class="bc-fill safe" style="width:1%;"></div></div><div class="bc-val">0%</div></div>
-  <div class="bc-row"><div class="bc-label">PEP-Adjacent (C)</div><div class="bc-track"><div class="bc-fill safe" style="width:1%;"></div></div><div class="bc-val">0%</div></div>
+  <div class="bc-row"><div class="bc-label">PEP-adjacent (C)</div><div class="bc-track"><div class="bc-fill safe" style="width:1%;"></div></div><div class="bc-val">0%</div></div>
   <div class="bc-row"><div class="bc-label">Ambiguous (E)</div><div class="bc-track"><div class="bc-fill safe" style="width:1%;"></div></div><div class="bc-val">0%</div></div>
-  <div class="bc-group-label">Claude Sonnet 4.6 — hallucination rate by category</div>
+  <div class="bc-group-label">Claude Sonnet 4.6 — PEP inference failure concentrated in Category C</div>
   <div class="bc-row"><div class="bc-label">Clean (A)</div><div class="bc-track"><div class="bc-fill safe" style="width:1%;"></div></div><div class="bc-val">0%</div></div>
-  <div class="bc-row"><div class="bc-label">PEP-Adjacent (C)</div><div class="bc-track"><div class="bc-fill warn" style="width:50%;">50%</div></div><div class="bc-val">50%</div></div>
-  <div class="bc-group-label">GPT-4o-mini — hallucination rate by category</div>
+  <div class="bc-row"><div class="bc-label">PEP-adjacent (C)</div><div class="bc-track"><div class="bc-fill warn" style="width:50%;">50%</div></div><div class="bc-val">50%</div></div>
+  <div class="bc-group-label">GPT-4o-mini — template regurgitation concentrated in Category E</div>
   <div class="bc-row"><div class="bc-label">Clean (A)</div><div class="bc-track"><div class="bc-fill safe" style="width:1%;"></div></div><div class="bc-val">0%</div></div>
   <div class="bc-row"><div class="bc-label">Ambiguous (E)</div><div class="bc-track"><div class="bc-fill warn" style="width:67%;">67%</div></div><div class="bc-val">67%</div></div>
 </div>
-<figcaption><span class="label">Figure 1.</span> Hallucination rates visualised by model and category. Each model's failure is concentrated in a different entity category, reflecting distinct underlying mechanisms.</figcaption>
+<figcaption><span class="label">Figure 3.</span> Hallucination rates by model and category. The two failure modes are disjoint across models: Sonnet fails on PEP-adjacent entities while GPT-4o-mini fails on ambiguous entities.</figcaption>
 </figure>
 
-<h3>Type 1 — PEP inference hallucination (Claude Sonnet 4.6, 50%)</h3>
+<h2><span class="num">06</span>Hallucination Failure Modes</h2>
 
-<p>Claude Sonnet 4.6 hallucinated politically exposed person status for Category C entities — those with political adjacency but no direct PEP classification — at a rate of 50%. The failure mode is inferential rather than confabulatory: the model observes a genuine relationship between the entity and a political figure, and then infers — incorrectly — that this relationship is sufficient to constitute PEP status under standard compliance definitions.</p>
+<figure>
+<div class="tax-root">Adverse Media Hallucination</div>
+<div class="tax-connector">↙ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ↘</div>
+<div class="tax-branches">
+  <div class="tax-node type1">
+    <div class="tn-type">Type 1</div>
+    <div class="tn-name">PEP Inference Hallucination</div>
+    <div class="tn-model">Claude Sonnet 4.6 · 50% on Cat. C</div>
+    <p>Model infers PEP status from political adjacency (government contracts, meetings with officials). No FATF-defined PEP classification exists for the entity. Extrinsic hallucination via inferential overreach.</p>
+  </div>
+  <div class="tax-node type2">
+    <div class="tn-type">Type 2</div>
+    <div class="tn-name">Template-Regurgitation Hallucination</div>
+    <div class="tn-model">GPT-4o-mini · 67% on Cat. E</div>
+    <p>Model generates structurally plausible adverse media report with correct formatting, confidence language, and risk categories, without grounding in source material. Format-driven confabulation.</p>
+  </div>
+</div>
+<figcaption><span class="label">Figure 4.</span> Hallucination taxonomy. Two distinct failure modes, each with a different underlying mechanism and concentrated in a different model and entity category.</figcaption>
+</figure>
 
-<p>An illustrative example: a Category C entity is described as a business executive whose company holds government supply contracts. The source articles confirm the contract relationship and mention meetings with ministry officials. Claude Sonnet 4.6 assessed this entity as a PEP "due to significant interaction with government decision-makers and dependency on public procurement." Under the Financial Action Task Force (FATF) definition, PEP status attaches to individuals who hold or have held a prominent public function — not to private individuals who interact with those functions. The model has conflated political exposure with political adjacency, producing a false PEP flag.</p>
+<h3>Type 1 in detail: PEP inference hallucination</h3>
 
-<div class="example-block">
-  <div class="ex-label">Type 1 hallucination — illustrative model output excerpt</div>
-  <p class="ex-text">"Based on the reviewed materials, [Entity C-04] should be classified as a politically exposed person (PEP) or PEP-adjacent individual due to significant interaction with government decision-makers and dependency on public procurement relationships. Enhanced due diligence is recommended." — <strong>No PEP status exists in ground-truth; entity is a private sector contractor.</strong></p>
+<p>The FATF defines a politically exposed person as an individual who is or has been entrusted with a prominent public function, such as heads of state, senior politicians, senior government officials, judicial officials, senior military officers, and executives of state-owned enterprises <a href="#ref-1">[1]</a>. This definition explicitly does not extend to private sector individuals who interact with government, hold government contracts, or associate with public officials in a professional capacity.</p>
+
+<p>Claude Sonnet 4.6 systematically conflated political adjacency with PEP classification. Category C entities were described as private sector actors with genuine government-adjacent relationships: a logistics company executive whose firm holds Ministry of Transport contracts, a consultant who attended regulatory working group meetings, a corporate lawyer who frequently appeared in regulatory proceedings. In 10 of 20 cases, the model's output included a positive PEP flag with explanatory language that revealed the inferential nature of the error.</p>
+
+<div class="example-block hallucinated">
+  <div class="ex-label">PEP inference hallucination <span class="ex-verdict">fabricated — no PEP status exists</span></div>
+  <p class="ex-text">"Risk assessment: Entity C-04 should be classified as PEP-adjacent or potentially PEP-equivalent due to significant and sustained interaction with senior government procurement officials and material financial dependency on public sector contracts. Enhanced due diligence is recommended in line with FATF Recommendation 12."</p>
 </div>
 
-<h3>Type 2 — Template-regurgitation hallucination (GPT-4o-mini, 67%)</h3>
-
-<p>GPT-4o-mini exhibited a qualitatively different failure mode in Category E (ambiguous/mixed-signal) entities. At a 67% rate, the model generated adverse media summaries that were structurally indistinguishable from genuine adverse media reports — correctly formatted, plausibly detailed, and professionally worded — without grounding in the source articles provided. The model appeared to be generating content that matches the expected schema of an adverse media finding rather than deriving content from the actual evidence.</p>
-
-<p>This failure mode is distinct from simple factual confabulation. The model is not misremembering a fact it learned in training. It is generating a coherent, structurally plausible document that happens to contain adverse associations with no basis in the provided source material. The danger in a compliance context is that this output could pass a superficial human review: a reviewer scanning a well-formatted, professionally phrased adverse media summary may not think to verify each specific claim against the underlying articles.</p>
-
-<div class="example-block">
-  <div class="ex-label">Type 2 hallucination — illustrative model output excerpt</div>
-  <p class="ex-text">"Adverse media review identified multiple references to [Entity E-11] in connection with cross-border payment irregularities flagged by correspondent banking partners in 2022-2023. Sources indicate the entity was named in an internal review at [Financial Institution X] related to unusual transaction patterns consistent with layering activity." — <strong>No such references exist in source articles; all fabricated.</strong></p>
+<div class="example-block correct">
+  <div class="ex-label" style="color:var(--green);">Claude Opus 4.7 — correct assessment of same entity</div>
+  <p class="ex-text">"Entity C-04 is a private sector logistics executive whose company holds government supply contracts. While the entity has professional interactions with public officials in a procurement context, this does not constitute PEP status under FATF definitions. No PEP flag is warranted. Standard due diligence applies."</p>
 </div>
 
-<h3>Claude Opus 4.7 — 0% hallucination across all categories</h3>
+<p>The operational risk of this failure mode is specific: a model that PEP-flags government contractors, regulatory participants, and public sector lawyers will generate a high volume of false enhanced due diligence requirements, imposing compliance costs and potentially disadvantaging legitimate businesses with public sector exposure.</p>
 
-<p>Claude Opus 4.7 produced no hallucinated adverse associations in any of the five entity categories. On PEP-adjacent entities, the model correctly distinguished between political adjacency and PEP classification, consistently noting the distinction explicitly in its outputs. On ambiguous entities, the model acknowledged uncertainty without generating unsupported adverse associations. This result demonstrates that the failure modes identified above are not inherent to the adverse media screening task — they are model-specific, and a sufficiently capable model can navigate the task without hallucination.</p>
+<h3>Type 2 in detail: template-regurgitation hallucination</h3>
 
-<h2><span class="num">06</span>Discussion</h2>
+<p>Category E entities were constructed with genuinely ambiguous adverse signals: partial information, conflicting article dates, entities whose names appear in adverse news articles but in contexts that may involve name collisions, and entities with historical adverse associations that have since been resolved. These are the entities most likely to require careful, evidence-grounded analysis.</p>
 
-<p>The results reveal a pattern that is both reassuring and concerning. The reassuring finding is that all models correctly handled clean entities: none hallucinated adverse associations for entities with no adverse source material. This suggests that the baseline false-positive problem — generating adverse flags for clearly clean parties — is well-controlled in current frontier models.</p>
+<p>GPT-4o-mini produced, in 67% of Category E cases, adverse media assessments that were structurally indistinguishable from legitimate findings but contained specific claims with no basis in the provided source articles: fabricated transaction dates, non-existent regulatory proceedings, invented correspondent banking relationships. The model appeared to be generating content that matches the expected schema of an adverse media report rather than extracting content from the actual documents provided.</p>
 
-<p>The concerning finding is that the same models that performed perfectly on clean entities exhibited substantial hallucination rates in structurally adjacent categories. Claude Sonnet 4.6 passed the clean entity test and then failed 50% of PEP-adjacent entities. GPT-4o-mini passed the clean entity test and then failed 67% of ambiguous entities. These failures would be invisible to any evaluation that tests only clean-entity false positive rates — which is the most common evaluation design in practitioner discussions of LLM adverse media screening.</p>
+<div class="example-block hallucinated">
+  <div class="ex-label">Template-regurgitation hallucination <span class="ex-verdict">fabricated — no source basis</span></div>
+  <p class="ex-text">"Adverse media review identified multiple references to Entity E-11 in connection with cross-border payment irregularities flagged by correspondent banking partners in Q3 2022. Sources indicate the entity was named in an internal review at a major European financial institution related to layering activity consistent with money laundering typologies."</p>
+</div>
 
-<p>The practical implication is that aggregate accuracy metrics are insufficient for compliance deployment decisions. A model's performance on clean entities does not predict its performance on the specific entity types — PEP-adjacent, common-name, ambiguous — that are most likely to appear in real screening queues and most likely to elicit hallucination. Category-specific evaluation, using a benchmark that deliberately probes these structural failure modes, is required before any deployment decision can be made with confidence.</p>
+<p>The danger in a compliance context is that this output is difficult for a human reviewer to identify as hallucinated without independently verifying each specific claim against the source articles. A well-formatted, professionally phrased adverse media summary with specific dates, institutions, and transaction descriptions looks legitimate. Superficial review by an overloaded analyst may not catch it.</p>
 
-<h2><span class="num">07</span>Limitations</h2>
+<h2><span class="num">07</span>Discussion &amp; Implications</h2>
+
+<p>The finding that all three models achieved 0% false positive rates on clean entities provides qualified reassurance: the baseline false positive problem is well-controlled. But this result would be the only datapoint reported by an evaluation design that tests only clean entities, which is the most common approach in practitioner discussions of LLM adverse media screening. The two failure modes identified here are entirely invisible to that evaluation design.</p>
+
+<p>The model-level finding is striking. Claude Opus 4.7 avoided hallucination on every category, including the PEP-adjacent and ambiguous categories where the smaller models failed. This suggests that capability matters for this specific task in ways that are not reflected in general benchmarks. A deployment decision based on a general hallucination rate (rather than on domain-specific, category-stratified evaluation) would systematically underweight the risk of deploying Claude Sonnet 4.6 for PEP screening and GPT-4o-mini for ambiguous entity screening.</p>
+
+<h2><span class="num">08</span>Limitations</h2>
 
 <ol>
-  <li>The benchmark uses synthetic entities. While this avoids ethical complications, synthetic entities may not fully replicate the complexity and ambiguity of real adverse media screening cases, particularly those involving corporate structures, nominee arrangements, and multi-jurisdictional adverse media.</li>
-  <li>The sample of 100 entities, divided across five categories, limits statistical power within each category. The hallucination rates reported here — particularly the 50% and 67% figures — should be treated as directional indicators rather than precise estimates until replicated at larger scale.</li>
-  <li>All models were evaluated on the same structured prompts without model-specific tuning. In practice, compliance teams would likely tune prompts for their specific use case, which may reduce or shift the hallucination patterns observed here.</li>
-  <li>This evaluation tests a single-pass screening design. Real compliance workflows typically involve iterative review, human-in-the-loop validation, and multiple information sources. The hallucination rates reported here reflect the raw model output before any such checks are applied.</li>
+  <li>The benchmark uses synthetic entities. Synthetic construction may not replicate the full complexity of real adverse media screening, particularly cases involving layered corporate structures, nominee arrangements, and multi-jurisdictional adverse media.</li>
+  <li>Category sample sizes of 20 entities each provide directional estimates rather than precise rates. The 50% and 67% figures carry wide confidence intervals at n=20 and should be replicated at larger scale.</li>
+  <li>All models were evaluated with identical prompts. In practice, compliance teams would tune prompts for their specific use case. Prompt tuning may shift the hallucination rates observed here.</li>
+  <li>This evaluation tests a single-pass design. Real screening workflows involve iterative review and multiple information sources. Rates reflect raw model output before human review.</li>
 </ol>
 
-<h2><span class="num">08</span>Conclusion</h2>
+<h2><span class="num">09</span>Conclusion</h2>
 
-<p>This study establishes that hallucination in LLM-based AML adverse media screening is not uniformly distributed and is not well-characterised by clean-entity false positive rates alone. Two distinct failure modes — PEP inference hallucination and template-regurgitation hallucination — operate through different mechanisms, affect different model families, and would be missed by the most common evaluation approaches. Claude Opus 4.7 avoided both failure modes entirely, demonstrating that the task is solvable without hallucination at the current frontier of model capability.</p>
+<p>Hallucination in LLM-based AML adverse media screening is not uniformly distributed and is not well-characterised by clean-entity false positive rates. Two distinct failure modes, PEP inference hallucination and template-regurgitation hallucination, operate through different mechanisms, concentrate in different model families, and would be entirely missed by the most common evaluation approaches. Claude Opus 4.7 avoided both failure modes entirely, demonstrating that the task is solvable without hallucination at the current frontier of model capability.</p>
 
-<p>The practical recommendation is categorical: organisations evaluating LLMs for adverse media screening should test against the specific entity types most likely to appear in their screening queues, including PEP-adjacent, common-name, and ambiguous entities. Clean-entity performance, while necessary, is not sufficient evidence of safe deployment. The benchmark and evaluation harness developed for this study are released as open source to enable compliance teams and researchers to replicate and extend this evaluation framework.</p>
+<p>Organisations evaluating LLMs for adverse media screening should test against the specific entity categories most likely to trigger hallucination: PEP-adjacent entities, common-name entities, and entities with ambiguous or incomplete adverse media signals. Aggregate accuracy on clean entities is a necessary but far from sufficient condition for safe compliance deployment.</p>
 
 <div class="resources">
   <h3>Resources</h3>
   <ul>
     <li><span class="resource-name">Code, dataset &amp; evaluation harness</span><a href="https://github.com/Prakharanand000/adverse-media-hallucination" target="_blank" class="resource-action">GitHub</a></li>
-    <li><span class="resource-name">Pilot write-up &amp; analysis</span><a href="https://medium.com/@prakharanand/adverse-media-hallucination-in-llm-based-aml-screening-a6a361e48c94" target="_blank" class="resource-action">Medium</a></li>
-    <li><span class="resource-name">Research proposal &amp; pre-registration</span><a href="https://github.com/Prakharanand000/adverse-media-hallucination/blob/main/RESEARCH_PROPOSAL.md" target="_blank" class="resource-action">Markdown</a></li>
+    <li><span class="resource-name">Pilot write-up</span><a href="https://medium.com/@prakharanand/adverse-media-hallucination-in-llm-based-aml-screening-a6a361e48c94" target="_blank" class="resource-action">Medium</a></li>
+    <li><span class="resource-name">Research proposal</span><a href="https://github.com/Prakharanand000/adverse-media-hallucination/blob/main/RESEARCH_PROPOSAL.md" target="_blank" class="resource-action">Markdown</a></li>
   </ul>
 </div>
 
 <div class="refs">
 <h2>References</h2>
 <ol>
-  <li id="ref-1">FATF (2021). <a href="https://www.fatf-gafi.org/en/publications/Fatfrecommendations/Peps.html" target="_blank">Guidance on Politically Exposed Persons</a>. Financial Action Task Force.</li>
-  <li id="ref-2">Ji, Z., Lee, N., Frieske, R., et al. (2023). <a href="https://dl.acm.org/doi/10.1145/3571730" target="_blank">Survey of Hallucination in Natural Language Generation</a>. ACM Computing Surveys.</li>
-  <li id="ref-3">Huang, L., Yu, W., Ma, W., et al. (2023). <a href="https://arxiv.org/abs/2311.05232" target="_blank">A Survey on Hallucination in Large Language Models</a>. arXiv:2311.05232.</li>
-  <li id="ref-4">Maynez, J., Narayan, S., Bohnet, B., &amp; McDonald, R. (2020). <a href="https://aclanthology.org/2020.acl-main.173/" target="_blank">On Faithfulness and Factuality in Abstractive Summarization</a>. ACL 2020.</li>
-  <li id="ref-5">Guo, Z., Schlichtkrull, M., &amp; Vlachos, A. (2022). <a href="https://aclanthology.org/2022.acl-long.297/" target="_blank">A Survey on Automated Fact-Checking</a>. ACL 2022.</li>
-  <li id="ref-6">Basel Committee on Banking Supervision (2021). <em>Principles for the Sound Management of Operational Risk</em>. Bank for International Settlements.</li>
+  <li id="ref-1">FATF (2021). <a href="https://www.fatf-gafi.org/en/publications/Fatfrecommendations/Peps.html" target="_blank">Guidance on Politically Exposed Persons.</a> Financial Action Task Force.</li>
+  <li id="ref-2">Ji, Z., Lee, N., Frieske, R., et al. (2023). <a href="https://dl.acm.org/doi/10.1145/3571730" target="_blank">Survey of Hallucination in Natural Language Generation.</a> ACM Computing Surveys, 55(12).</li>
+  <li id="ref-3">Huang, L., Yu, W., Ma, W., et al. (2023). <a href="https://arxiv.org/abs/2311.05232" target="_blank">A Survey on Hallucination in Large Language Models: Principles, Taxonomy, Challenges, and Open Questions.</a> arXiv:2311.05232.</li>
+  <li id="ref-4">Maynez, J., Narayan, S., Bohnet, B., &amp; McDonald, R. (2020). <a href="https://aclanthology.org/2020.acl-main.173/" target="_blank">On Faithfulness and Factuality in Abstractive Summarization.</a> ACL 2020.</li>
+  <li id="ref-5">Guo, Z., Schlichtkrull, M., &amp; Vlachos, A. (2022). <a href="https://aclanthology.org/2022.acl-long.297/" target="_blank">A Survey on Automated Fact-Checking.</a> ACL 2022.</li>
+  <li id="ref-6">Basel Committee on Banking Supervision (2021). <em>Principles for the Sound Management of Operational Risk.</em> Bank for International Settlements.</li>
+  <li id="ref-7">Lewis, P., Perez, E., Piktus, A., et al. (2020). <a href="https://arxiv.org/abs/2005.11401" target="_blank">Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks.</a> NeurIPS 2020.</li>
 </ol>
 </div>
 
