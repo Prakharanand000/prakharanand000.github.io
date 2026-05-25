@@ -589,6 +589,18 @@ footer { padding:2rem 2.5rem; display:flex; align-items:center; justify-content:
         </div>
       </div>
 
+      <div class="project-card fade-in" data-cat="personal" style="transition-delay:0.55s">
+        <p class="project-award">Independent Research &mdash; AI Safety</p>
+        <h3 class="project-name">LLM Sycophancy in Financial Advice</h3>
+        <p class="project-desc">Pre-registered, blinded eval measuring whether frontier LLMs shift financial recommendations based on user-expressed priors (bullish vs. bearish vs. neutral framing). Built a 150-scenario dataset across 10 asset classes and 4 risk tiers. Ran 360 API calls across Claude Sonnet 4.6 and GPT-4o-mini, scored by a Claude Opus 4.7 judge blinded to user framing. Found 0% symmetric sycophancy but significant asymmetric effects: GPT-4o-mini shows 40% bullish deference with near-zero bearish adjustment; Claude shifts response posture without flipping the substantive recommendation. Open-sourced eval harness, 150-scenario dataset, and judge rubric.</p>
+        <div class="project-footer">
+          <span class="project-stack">Python, Claude Sonnet 4.6 / Opus 4.7 (Anthropic), GPT-4o-mini (OpenAI), pandas, scipy, matplotlib</span>
+          <div class="project-links">
+            <a href="https://github.com/Prakharanand000/sycophancy-finance" target="_blank" class="proj-link">GitHub</a>
+          </div>
+        </div>
+      </div>
+
       <div class="project-card fade-in" data-cat="academic" style="transition-delay:0.7s">
         <p class="project-award">GSTN Internship &mdash; Government Analytics</p>
         <h3 class="project-name">GST Revenue Forecasting</h3>
