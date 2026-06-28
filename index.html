@@ -630,13 +630,16 @@ footer { padding:2rem 2.5rem; display:flex; align-items:center; justify-content:
       </div>
       <div>
         <h3 class="research-title">Below the Aggregate: Slice &amp; Adversarial Failure of a Toxicity Classifier</h3>
-        <p class="research-abstract">A reproducible harness showing that a production toxicity classifier&apos;s healthy aggregate F1 (0.70 on Civil Comments, 0.76 on HateCheck) hides three real failures. Evaluated Detoxify at threshold 0.5 across 1,500 Civil Comments and 3,728 HateCheck cases with per-slice metrics, a nine-attack mechanical evasion matrix paired with normalization defenses, and a live LLM red-team (Claude paraphrasing caught items, a second pass judging intent preserved). Found a slice cliff (implicit-hate recall 0.53 vs. 0.77 overall; 47% of implicit hate missed), a mechanical-vs-semantic split (character attacks reach ~100% evasion but normalization recovers ~0.99 recall, while LLM paraphrases evade at 0.57 ESR and are <em>not</em> recoverable), and calibration that fails to transfer (ECE 0.022 vs. 0.226). Each finding maps to a concrete operating recommendation. Public proxy data only; working evasion strings withheld as dual-use.</p>
+        <p class="research-abstract">A reproducible harness showing that a production toxicity classifier&apos;s healthy aggregate F1 (0.70 on Civil Comments, 0.76 on HateCheck) hides three real failures. Evaluated Detoxify at threshold 0.5 across 1,500 Civil Comments and 3,728 HateCheck cases with per-slice metrics, a nine-attack mechanical evasion matrix paired with normalization defenses, and a live LLM red-team (Claude paraphrasing caught items, a second pass judging intent preserved). Found a slice cliff (implicit-hate recall 0.53 vs. 0.77 overall; 47% of implicit hate missed), a mechanical-vs-semantic split (character attacks reach ~100% evasion but normalization recovers ~0.99 recall, while LLM paraphrases evade at 0.57 ESR and are <em>not</em> recoverable), and calibration that fails to transfer (ECE 0.022 vs. 0.226). Each finding maps to a concrete operating recommendation. Shipped as a FastAPI + React interactive scanner (Live Scanner, Attack Lab, Slice Explorer, Calibration Dashboard) deployed on Render via Docker. Public proxy data only; working evasion strings withheld as dual-use.</p>
         <div class="research-tag-row">
           <span class="tag">Python</span>
           <span class="tag">Detoxify</span>
           <span class="tag">RoBERTa</span>
           <span class="tag">HateCheck</span>
           <span class="tag">Claude (red-team)</span>
+          <span class="tag">FastAPI</span>
+          <span class="tag">React</span>
+          <span class="tag">Docker</span>
           <span class="tag">pandas</span>
         </div>
         <div class="research-links">
